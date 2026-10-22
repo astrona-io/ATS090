@@ -1,0 +1,55 @@
+# Repair The Login Of A Single Page Application
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-capstone-020-setup"
+      description: "Creates the realm inventory with inventory-web broken in four ways for a single page application"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-web-client-settings"
+      description: "Confirms inventory-web is public with the standard flow and the exact redirect URI"
+      type: "file"
+      source: "validation/validate-web-client-settings.sh"
+    - name: "validate-pkce-s256-required"
+      description: "Confirms inventory-web requires PKCE with the method S256"
+      type: "file"
+      source: "validation/validate-pkce-s256-required.sh"
+    - name: "validate-spa-login"
+      description: "Confirms the code flow with PKCE and no secret ends with an ID token for alice with the request's nonce"
+      type: "file"
+      source: "validation/validate-spa-login.sh"
+    - name: "validate-flow-without-pkce-rejected"
+      description: "Confirms Keycloak refuses an authorization request without PKCE"
+      type: "file"
+      source: "validation/validate-flow-without-pkce-rejected.sh"
+
+teardown:
+  keepCluster: false

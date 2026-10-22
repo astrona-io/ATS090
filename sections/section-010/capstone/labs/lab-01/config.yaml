@@ -1,0 +1,55 @@
+# Secure The Clients Of A Realm
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-capstone-010-setup"
+      description: "Creates the realm inventory with an over-open browser client and a service client that cannot authenticate"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-web-client-settings"
+      description: "Confirms inventory-web is public, has no implicit flow, an exact redirect URI and no wildcard origin"
+      type: "file"
+      source: "validation/validate-web-client-settings.sh"
+    - name: "validate-implicit-rejected"
+      description: "Confirms Keycloak refuses the implicit flow for inventory-web"
+      type: "file"
+      source: "validation/validate-implicit-rejected.sh"
+    - name: "validate-login-and-cors"
+      description: "Confirms alice can sign in and only http://localhost:5173 may read the token response"
+      type: "file"
+      source: "validation/validate-login-and-cors.sh"
+    - name: "validate-reporter-token"
+      description: "Confirms inventory-reporter gets a token with the client credentials grant"
+      type: "file"
+      source: "validation/validate-reporter-token.sh"
+
+teardown:
+  keepCluster: false

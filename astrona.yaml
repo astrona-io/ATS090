@@ -1,0 +1,349 @@
+# Course manifest for ATS090 - Securing Applications & Services (Keycloak).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS090
+  title: "Keycloak: Securing Applications & Services"
+  maturity: draft
+  description: >
+    Training material covering the Securing Applications & Services domain of
+    the Keycloak training path: public and confidential clients, client
+    authentication, redirect URIs, web origins and CORS, the authorization
+    code flow with PKCE, state, nonce and the ID token, validating access
+    tokens in an API with the JWKS, the issuer, the audience and roles,
+    audience mappers and client scopes, token introspection, and token
+    propagation through an API gateway with standard token exchange. Each
+    module pairs a layered reader with an ungraded hands-on playground and a
+    graded practice lab. Each section closes with an integration capstone.
+    Written for Keycloak 26.8.1.
+
+  certification:
+    name: Keycloak
+    code: KEYCLOAK
+    provider: Astrona
+    domain: Securing Applications & Services
+    weight: 25
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Clients, Redirect URIs And Web Origins"
+    description: >
+      Public and confidential clients and how a confidential client
+      authenticates, valid redirect URIs and why wildcards are dangerous, and
+      web origins and CORS for applications that run in the browser.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Configure Clients For Applications And Services"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Public Clients, Confidential Clients And Client Authentication"
+        path: sections/section-010/module-01/course-01-public-and-confidential-clients.md
+      - type: reading
+        title: "Valid Redirect URIs And The Front Channel"
+        path: sections/section-010/module-01/course-02-redirect-uris.md
+      - type: reading
+        title: "Web Origins And CORS"
+        path: sections/section-010/module-01/course-03-web-origins-and-cors.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Lock Down The Redirect URIs And Web Origins Of A Browser Client Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: clients
+        task_kind: troubleshooting
+        tags: [public-client, redirect-uris, web-origins, cors, authorization-code, kcadm]
+        learning_goals:
+          - Replace a wildcard redirect URI with the one exact address the application uses
+          - Limit the web origins so only the application's own origin may read token responses
+          - Prove the result with a sign-in that works and a foreign redirect URI and origin that Keycloak refuses
+        resources:
+          - name: "Server Administration Guide: OpenID Connect clients"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients
+          - name: "Securing applications: OpenID Connect"
+            url: https://www.keycloak.org/securing-apps/oidc-layers
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Secure The Clients Of A Realm Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: clients
+        task_kind: troubleshooting
+        tags: [public-client, confidential-client, implicit-flow, redirect-uris, web-origins, service-account, client-secret]
+        learning_goals:
+          - Find which client settings let a browser client or a service client fail or leak
+          - Turn off the implicit flow and lock down redirect URIs and web origins
+          - Make a service client confidential so it can authenticate with a client secret
+        resources:
+          - name: "Server Administration Guide: OpenID Connect clients"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients
+          - name: "Server Administration Guide: confidential client credentials"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client-credentials
+          - name: "RFC 6749 section 2.1: client types"
+            url: https://datatracker.ietf.org/doc/html/rfc6749#section-2.1
+
+  - id: module-020
+    title: "The Authorization Code Flow With PKCE"
+    description: >
+      The authorization code flow step by step, run by hand from a terminal;
+      Proof Key for Code Exchange (PKCE) with the S256 method; and the state
+      and nonce values that protect the flow and the ID token.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Sign Users In With The Authorization Code Flow And PKCE"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "The Authorization Code Flow Step By Step"
+        path: sections/section-020/module-01/course-01-the-authorization-code-flow.md
+      - type: reading
+        title: "Proof Key For Code Exchange (PKCE)"
+        path: sections/section-020/module-01/course-02-pkce.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Require PKCE With S256 For A Public Client Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: browser-flows
+        task_kind: troubleshooting
+        tags: [pkce, s256, authorization-code, public-client, kcadm]
+        learning_goals:
+          - Require PKCE with the S256 method on a public client
+          - Prove that a flow with a code verifier ends with tokens and a code alone does not
+          - Prove that Keycloak refuses requests without PKCE and with the method plain
+        resources:
+          - name: "RFC 7636: Proof Key for Code Exchange"
+            url: https://datatracker.ietf.org/doc/html/rfc7636
+          - name: "Server Administration Guide: OpenID Connect clients"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients
+      - type: reading
+        title: "State, Nonce And The ID Token"
+        path: sections/section-020/module-01/course-03-state-nonce-and-the-id-token.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair The Login Of A Single Page Application Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: browser-flows
+        task_kind: troubleshooting
+        tags: [single-page-application, public-client, authorization-code, pkce, redirect-uris, nonce, id-token]
+        learning_goals:
+          - Follow a failing browser sign-in step by step to find where Keycloak stops it
+          - Fix the client type, the flow, the redirect URI and the PKCE requirement of a single page application
+          - Prove the fix with an ID token for alice that carries the nonce of the request
+        resources:
+          - name: "Securing applications: OpenID Connect"
+            url: https://www.keycloak.org/securing-apps/oidc-layers
+          - name: "OpenID Connect Core 1.0: authorization code flow"
+            url: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
+          - name: "RFC 7636: Proof Key for Code Exchange"
+            url: https://datatracker.ietf.org/doc/html/rfc7636
+
+  - id: module-030
+    title: "Validating Access Tokens In An API"
+    description: >
+      What an API must check in an access token: the signature against the
+      realm's JWKS and key rotation, the issuer, the audience and the expiry,
+      then roles. How audience mappers and client scopes put the right
+      audience in a token, and when to ask Keycloak with token introspection.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Validate Access Tokens In An API"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "What An API Checks In An Access Token"
+        path: sections/section-030/module-01/course-01-what-an-api-checks.md
+      - type: reading
+        title: "Signatures, The JWKS And Key Rotation"
+        path: sections/section-030/module-01/course-02-signatures-and-jwks.md
+      - type: reading
+        title: "Audience, Audience Mappers And Client Scopes"
+        path: sections/section-030/module-01/course-03-audience-and-client-scopes.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Add The API Audience With A Client Scope Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: token-validation
+        task_kind: troubleshooting
+        tags: [audience, audience-mapper, client-scopes, access-token, jwt, kcadm]
+        learning_goals:
+          - Read why an API rejects a token from its log and the token's claims
+          - Create a client scope with an audience mapper and make it a default scope of one client
+          - Prove that the API accepts the token while other clients' tokens stay without the audience
+        resources:
+          - name: "Server Administration Guide: audience support"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#audience-support
+          - name: "Server Administration Guide: client scopes"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_scopes
+          - name: "RFC 7519 section 4.1.3: the aud claim"
+            url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.3
+      - type: reading
+        title: "Roles In Tokens And Token Introspection"
+        path: sections/section-030/module-01/course-04-roles-and-introspection.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Make An API Accept The Right Tokens Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: token-validation
+        task_kind: troubleshooting
+        tags: [audience, audience-mapper, realm-roles, client-scopes, access-token, jwt]
+        learning_goals:
+          - Find each reason an API rejects a token from the API's log and the token's claims
+          - Fix the audience, the user's role and the client's scopes without changing the API
+          - Prove the fix with an accepted request and a token that holds only what it needs
+        resources:
+          - name: "Server Administration Guide: audience support"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#audience-support
+          - name: "Server Administration Guide: role scope mappings"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_role_scope_mappings
+          - name: "Securing applications: OpenID Connect"
+            url: https://www.keycloak.org/securing-apps/oidc-layers
+
+  - id: module-040
+    title: "Token Propagation Through An API Gateway"
+    description: >
+      What happens to a user's token when a gateway forwards it, why the
+      token's audience gets in the way, and how standard token exchange lets
+      the gateway get a new token for the API it calls, limited to the
+      audience that API needs.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Propagate Tokens Through An API Gateway"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Forwarding The Token Through A Gateway"
+        path: sections/section-040/module-01/course-01-forwarding-the-token.md
+      - type: reading
+        title: "Standard Token Exchange"
+        path: sections/section-040/module-01/course-02-standard-token-exchange.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Exchange A User Token At The Gateway Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: token-propagation
+        task_kind: build
+        tags: [token-exchange, api-gateway, audience, audience-mapper, confidential-client, kcadm]
+        learning_goals:
+          - Allow standard token exchange for the gateway's confidential client
+          - Make the API's audience available to the gateway and to no other client
+          - Prove that the exchanged token reaches the API while the user's original token does not
+        resources:
+          - name: "Securing applications: token exchange"
+            url: https://www.keycloak.org/securing-apps/token-exchange
+          - name: "RFC 8693: OAuth 2.0 Token Exchange"
+            url: https://datatracker.ietf.org/doc/html/rfc8693
+      - type: reading
+        title: "Downscoping And A Second API"
+        path: sections/section-040/module-01/course-03-downscoping-and-a-second-api.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Propagate A User To A Second API Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: token-propagation
+        task_kind: troubleshooting
+        tags: [token-exchange, downscoping, audience, api-gateway, realm-roles, token-forwarding]
+        learning_goals:
+          - Follow a user's request from the client through the gateway to a second API and find every point where it fails
+          - Fix the subject token's audience, the exchange permission, the available audiences and the user's role
+          - Prove that the gateway reaches both APIs and nothing else
+        resources:
+          - name: "Securing applications: token exchange"
+            url: https://www.keycloak.org/securing-apps/token-exchange
+          - name: "RFC 8693: OAuth 2.0 Token Exchange"
+            url: https://datatracker.ietf.org/doc/html/rfc8693
+          - name: "Server Administration Guide: audience support"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#audience-support

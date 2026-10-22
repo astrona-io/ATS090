@@ -1,0 +1,59 @@
+# Propagate A User To A Second API
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-capstone-040"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-capstone-040-setup"
+      description: "Creates the realm inventory with a gateway that must reach two APIs and four faults on the way"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-exchange-to-reporting"
+      description: "Confirms inventory-gateway exchanges alice's token for audience reporting-api, and reporting-api accepts it"
+      type: "file"
+      source: "validation/validate-exchange-to-reporting.sh"
+    - name: "validate-exchange-to-inventory"
+      description: "Confirms the exchange for audience inventory-api still works"
+      type: "file"
+      source: "validation/validate-exchange-to-inventory.sh"
+    - name: "validate-unavailable-audience-rejected"
+      description: "Confirms inventory-gateway cannot get a token for inventory-admin-api"
+      type: "file"
+      source: "validation/validate-unavailable-audience-rejected.sh"
+    - name: "validate-original-token-rejected"
+      description: "Confirms both APIs reject alice's original token"
+      type: "file"
+      source: "validation/validate-original-token-rejected.sh"
+    - name: "validate-apis-unchanged"
+      description: "Confirms the API code and settings were not changed"
+      type: "file"
+      source: "validation/validate-apis-unchanged.sh"
+
+teardown:
+  keepCluster: false

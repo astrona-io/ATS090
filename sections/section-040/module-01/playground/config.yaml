@@ -1,0 +1,24 @@
+# Propagate Tokens Through An API Gateway (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-playground-040-01"
+  docs:
+    guide: "docs/overview.md"
+
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Deploy Keycloak 26.8.1 and the module's workloads, wait for Keycloak, then create the realm inventory, the user alice with the realm role inventory-reader, the clients inventory-cli, inventory-gateway and inventory-api, and an audience mapper that puts inventory-gateway in the audience of inventory-cli's tokens."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Starting workloads (namespace exchange-demo, keycloak-admin Secret, keycloak Deployment and Service, tester client, inventory-api, inventory-gateway)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+teardown:
+  keepCluster: false

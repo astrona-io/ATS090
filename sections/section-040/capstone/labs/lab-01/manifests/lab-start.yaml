@@ -1,0 +1,485 @@
+# Starting workloads for the exchangecapstone-demo namespace: one Keycloak 26.8.1 pod in
+# development mode, a tester client pod with curl and jq,
+# and the API workloads the module uses.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: exchangecapstone-demo
+---
+# Bootstrap administrator for the master realm. Lab-only credentials.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-admin
+  namespace: exchangecapstone-demo
+type: Opaque
+stringData:
+  username: admin
+  password: admin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: exchangecapstone-demo
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.8.1
+          args: ["start-dev"]
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: username
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: password
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 9000
+          startupProbe:
+            httpGet:
+              path: /health/started
+              port: management
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: management
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: management
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 768Mi
+              cpu: 250m
+            limits:
+              memory: 1536Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: exchangecapstone-demo
+  labels:
+    app: keycloak
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: management
+      port: 9000
+      targetPort: management
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tester
+  namespace: exchangecapstone-demo
+  labels:
+    app: tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tester
+  template:
+    metadata:
+      labels:
+        app: tester
+    spec:
+      containers:
+        - name: tester
+          image: nicolaka/netshoot:v0.13
+          command: ["sh", "-c", "while true; do sleep 30; done"]
+---
+# The code of inventory-api (and reporting-api): a small Node.js server that
+# checks the signature, iss, aud, exp and a realm role of every access token.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-api-code
+  namespace: exchangecapstone-demo
+data:
+  server.js: |
+    // inventory-api: a small HTTP API that accepts a request only when it carries
+    // a valid access token from Keycloak. It uses Node.js core modules only.
+    //
+    // Configuration comes from environment variables:
+    //   ISSUER        the realm URL that must sign the token, for example
+    //                 http://keycloak:8080/realms/inventory
+    //   AUDIENCE      the value the token's aud claim must contain, for example
+    //                 inventory-api
+    //   REQUIRED_ROLE a realm role the token must carry in realm_access.roles
+    //   API_NAME      the name this API reports in its responses
+    //   PORT          the port to listen on (default 8080)
+    //
+    // Routes:
+    //   GET /healthz  always 200, for the readiness probe
+    //   GET /items    200 with JSON when the token is valid, otherwise 401 or 403
+    //                 with a JSON body that says why
+    'use strict';
+
+    const http = require('http');
+    const crypto = require('crypto');
+
+    const PORT = Number(process.env.PORT || 8080);
+    const ISSUER = process.env.ISSUER || '';
+    const AUDIENCE = process.env.AUDIENCE || '';
+    const REQUIRED_ROLE = process.env.REQUIRED_ROLE || '';
+    const API_NAME = process.env.API_NAME || 'inventory-api';
+    const JWKS_URL = process.env.JWKS_URL || `${ISSUER}/protocol/openid-connect/certs`;
+
+    // Public keys of the realm, by key ID (kid). Keycloak publishes them at the
+    // JWKS endpoint. When a token names a kid we do not know, we fetch the keys
+    // again: that is how the API follows a key rotation in the realm.
+    let signingKeys = new Map();
+
+    async function loadSigningKeys() {
+      const response = await fetch(JWKS_URL);
+      if (!response.ok) {
+        throw new Error(`JWKS request to ${JWKS_URL} failed with status ${response.status}`);
+      }
+      const body = await response.json();
+      const keys = new Map();
+      for (const jwk of body.keys || []) {
+        if (jwk.kty === 'RSA' && (jwk.use === undefined || jwk.use === 'sig')) {
+          keys.set(jwk.kid, crypto.createPublicKey({ key: jwk, format: 'jwk' }));
+        }
+      }
+      signingKeys = keys;
+    }
+
+    function decodeJsonPart(part) {
+      return JSON.parse(Buffer.from(part, 'base64url').toString('utf8'));
+    }
+
+    function reject(status, reason) {
+      return { status, reason };
+    }
+
+    async function checkToken(token) {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        return reject(401, 'the token is not a JWT');
+      }
+
+      let header;
+      let payload;
+      try {
+        header = decodeJsonPart(parts[0]);
+        payload = decodeJsonPart(parts[1]);
+      } catch (error) {
+        return reject(401, 'the token header or payload is not valid JSON');
+      }
+
+      if (header.alg !== 'RS256') {
+        return reject(401, `the token is signed with ${header.alg}, this API accepts RS256 only`);
+      }
+      if (!signingKeys.has(header.kid)) {
+        try {
+          await loadSigningKeys();
+        } catch (error) {
+          return reject(401, `the signing keys could not be loaded: ${error.message}`);
+        }
+      }
+      const key = signingKeys.get(header.kid);
+      if (!key) {
+        return reject(401, `no signing key with kid ${header.kid} in the realm`);
+      }
+
+      const signedData = Buffer.from(`${parts[0]}.${parts[1]}`);
+      const signature = Buffer.from(parts[2], 'base64url');
+      if (!crypto.verify('RSA-SHA256', signedData, key, signature)) {
+        return reject(401, 'the token signature does not verify');
+      }
+
+      if (payload.iss !== ISSUER) {
+        return reject(401, `iss is ${payload.iss}, expected ${ISSUER}`);
+      }
+
+      const audiences = Array.isArray(payload.aud) ? payload.aud : (payload.aud ? [payload.aud] : []);
+      if (!audiences.includes(AUDIENCE)) {
+        return reject(401, `aud ${JSON.stringify(audiences)} does not include ${AUDIENCE}`);
+      }
+
+      const now = Math.floor(Date.now() / 1000);
+      if (typeof payload.exp !== 'number' || payload.exp <= now) {
+        return reject(401, 'the token has expired');
+      }
+
+      // Keycloak sets typ to Bearer on access tokens and to ID on ID tokens.
+      if (payload.typ !== undefined && payload.typ !== 'Bearer') {
+        return reject(401, `typ is ${payload.typ}, this API accepts access tokens (Bearer) only`);
+      }
+
+      const roles = (payload.realm_access && payload.realm_access.roles) || [];
+      if (REQUIRED_ROLE && !roles.includes(REQUIRED_ROLE)) {
+        return reject(403, `the realm role ${REQUIRED_ROLE} is missing from realm_access.roles`);
+      }
+
+      return { status: 200, payload };
+    }
+
+    function sendJson(response, status, body, extraHeaders = {}) {
+      response.writeHead(status, { 'Content-Type': 'application/json', ...extraHeaders });
+      response.end(JSON.stringify(body));
+    }
+
+    const server = http.createServer(async (request, response) => {
+      const path = new URL(request.url, 'http://localhost').pathname;
+
+      if (path === '/healthz') {
+        sendJson(response, 200, { status: 'ok' });
+        return;
+      }
+      if (path !== '/items' || request.method !== 'GET') {
+        sendJson(response, 404, { error: 'not_found' });
+        return;
+      }
+
+      const authorization = request.headers.authorization || '';
+      const match = authorization.match(/^Bearer\s+(\S+)$/i);
+      let result;
+      if (!match) {
+        result = reject(401, 'no bearer token in the Authorization header');
+      } else {
+        result = await checkToken(match[1]);
+      }
+
+      if (result.status !== 200) {
+        console.log(`${request.method} ${path} ${result.status} ${result.reason}`);
+        const headers = result.status === 401
+          ? { 'WWW-Authenticate': `Bearer error="invalid_token", error_description="${result.reason.replace(/"/g, "'")}"` }
+          : {};
+        sendJson(response, result.status, { api: API_NAME, error: result.status === 401 ? 'invalid_token' : 'insufficient_role', reason: result.reason }, headers);
+        return;
+      }
+
+      const user = result.payload.preferred_username || result.payload.sub;
+      console.log(`${request.method} ${path} 200 user=${user} azp=${result.payload.azp}`);
+      sendJson(response, 200, {
+        api: API_NAME,
+        user,
+        azp: result.payload.azp,
+        items: [
+          { sku: 'BOLT-M6', quantity: 1200 },
+          { sku: 'NUT-M6', quantity: 950 },
+        ],
+      });
+    });
+
+    server.listen(PORT, () => {
+      console.log(`${API_NAME} listening on port ${PORT}, issuer ${ISSUER}, audience ${AUDIENCE}, role ${REQUIRED_ROLE || '(none)'}`);
+    });
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-api
+  namespace: exchangecapstone-demo
+  labels:
+    app: inventory-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-api
+  template:
+    metadata:
+      labels:
+        app: inventory-api
+    spec:
+      containers:
+        - name: inventory-api
+          image: node:22-alpine
+          command: ["node", "/app/server.js"]
+          env:
+            - name: API_NAME
+              value: inventory-api
+            - name: ISSUER
+              value: http://keycloak:8080/realms/inventory
+            - name: AUDIENCE
+              value: inventory-api
+            - name: REQUIRED_ROLE
+              value: inventory-reader
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+          volumeMounts:
+            - name: code
+              mountPath: /app
+      volumes:
+        - name: code
+          configMap:
+            name: inventory-api-code
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-api
+  namespace: exchangecapstone-demo
+  labels:
+    app: inventory-api
+spec:
+  selector:
+    app: inventory-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reporting-api
+  namespace: exchangecapstone-demo
+  labels:
+    app: reporting-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reporting-api
+  template:
+    metadata:
+      labels:
+        app: reporting-api
+    spec:
+      containers:
+        - name: reporting-api
+          image: node:22-alpine
+          command: ["node", "/app/server.js"]
+          env:
+            - name: API_NAME
+              value: reporting-api
+            - name: ISSUER
+              value: http://keycloak:8080/realms/inventory
+            - name: AUDIENCE
+              value: reporting-api
+            - name: REQUIRED_ROLE
+              value: reporting-reader
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+          volumeMounts:
+            - name: code
+              mountPath: /app
+      volumes:
+        - name: code
+          configMap:
+            name: inventory-api-code
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reporting-api
+  namespace: exchangecapstone-demo
+  labels:
+    app: reporting-api
+spec:
+  selector:
+    app: reporting-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# inventory-gateway: an nginx reverse proxy in front of inventory-api. nginx
+# passes the Authorization header on unchanged, so the API receives the
+# caller's own access token.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-gateway-nginx
+  namespace: exchangecapstone-demo
+data:
+  default.conf: |
+    server {
+      listen 8080;
+      location / {
+        proxy_pass http://inventory-api:8080;
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-gateway
+  namespace: exchangecapstone-demo
+  labels:
+    app: inventory-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-gateway
+  template:
+    metadata:
+      labels:
+        app: inventory-gateway
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: config
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: config
+          configMap:
+            name: inventory-gateway-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-gateway
+  namespace: exchangecapstone-demo
+  labels:
+    app: inventory-gateway
+spec:
+  selector:
+    app: inventory-gateway
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

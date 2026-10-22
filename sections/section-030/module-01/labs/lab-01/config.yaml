@@ -1,0 +1,55 @@
+# Add The API Audience With A Client Scope
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-lab-030-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-lab-030-01-setup"
+      description: "Creates the realm inventory where alice's tokens from inventory-cli lack the inventory-api audience"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-api-accepts-alice"
+      description: "Confirms inventory-api answers 200 to alice's access token from inventory-cli"
+      type: "file"
+      source: "validation/validate-api-accepts-alice.sh"
+    - name: "validate-audience-client-scope"
+      description: "Confirms the client scope inventory-api-audience holds the audience mapper and is a default scope of inventory-cli"
+      type: "file"
+      source: "validation/validate-audience-client-scope.sh"
+    - name: "validate-audience-not-everywhere"
+      description: "Confirms tokens of inventory-reporter do not carry the inventory-api audience"
+      type: "file"
+      source: "validation/validate-audience-not-everywhere.sh"
+    - name: "validate-api-unchanged"
+      description: "Confirms the API code and settings were not changed"
+      type: "file"
+      source: "validation/validate-api-unchanged.sh"
+
+teardown:
+  keepCluster: false

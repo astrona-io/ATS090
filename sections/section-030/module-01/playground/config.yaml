@@ -1,0 +1,24 @@
+# Validate Access Tokens In An API (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-playground-030-01"
+  docs:
+    guide: "docs/overview.md"
+
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Deploy Keycloak 26.8.1 and the module's workloads, wait for Keycloak, then create the realm inventory, the user alice with the realm role inventory-reader, the clients inventory-cli, inventory-reporter and inventory-api."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Starting workloads (namespace tokens-demo, keycloak-admin Secret, keycloak Deployment and Service, tester client, inventory-api)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+teardown:
+  keepCluster: false
