@@ -24,7 +24,7 @@ The client is public with the standard flow on, and the PKCE method is `plain`.
 
 ```sh
 kcadm update "clients/$WEB_ID" -r inventory -s 'attributes."pkce.code.challenge.method"=S256'
-kcadm get "clients/$WEB_ID" -r inventory --fields attributes | jq -r '.attributes["pkce.code.challenge.method"]'
+kcadm get "clients/$WEB_ID" -r inventory | jq -r '.attributes["pkce.code.challenge.method"]'
 ```
 
 The last command prints `S256`. In the Admin Console the same setting is **Proof Key for Code Exchange Code Challenge Method** on the client's **Advanced** tab.
