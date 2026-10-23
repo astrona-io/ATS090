@@ -7,7 +7,6 @@ metadata:
   name: "ats-090-playground-040-01"
   docs:
     guide: "docs/overview.md"
-
 bootstrap:
   init:
     - name: "prepare"
@@ -19,6 +18,12 @@ bootstrap:
       description: "Starting workloads (namespace exchange-demo, keycloak-admin Secret, keycloak Deployment and Service, tester client, inventory-api, inventory-gateway)."
       type: "file"
       source: "manifests/lab-start.yaml"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nginx:1.27-alpine
+      - nicolaka/netshoot:v0.13
+      - node:22-alpine
+      - quay.io/keycloak/keycloak:26.8.1

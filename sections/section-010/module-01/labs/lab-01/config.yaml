@@ -9,7 +9,6 @@ metadata:
     question: "question.md"
     examQuestion: "question.md"
     prerequisites: "prerequisites.md"
-
 bootstrap:
   init:
     - name: "deploy-keycloak"
@@ -20,7 +19,6 @@ bootstrap:
       description: "Creates the realm inventory with inventory-web accepting any redirect URI and any web origin"
       type: "file"
       source: "bootstrap/02-seed-state.sh"
-
 testing:
   init:
     - name: "wait-for-keycloak"
@@ -31,7 +29,6 @@ testing:
       description: "The remediation a correct learner performs; used by `astrona test`"
       type: "file"
       source: "solution/apply.sh"
-
 validation:
   scripts:
     - name: "validate-web-client-settings"
@@ -46,6 +43,10 @@ validation:
       description: "Confirms Keycloak refuses a redirect URI on another website"
       type: "file"
       source: "validation/validate-foreign-redirect-rejected.sh"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/keycloak/keycloak:26.8.1
