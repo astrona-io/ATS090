@@ -30,8 +30,6 @@ training:
     name: Keycloak
     code: KEYCLOAK
     provider: Astrona
-    domain: Securing Applications & Services
-    weight: 25
 
 modules:
 
