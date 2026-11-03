@@ -1,0 +1,245 @@
+# Knowledge check for section 050. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-050
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-050
+  title: "Authenticate Service Clients With Client Credentials"
+placement:
+  position: after
+  reading: sections/section-050/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-050-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say when to use the client credentials grant"
+    source_readings:
+      - sections/section-050/module-01/course-01-the-client-credentials-grant.md
+    prompt: "A nightly job calls an API and no person signs in. Which grant should its client use?"
+    options:
+      - id: a
+        text: "The authorization code flow with PKCE."
+        explanation: "Not correct. That flow needs a user who signs in through a browser."
+      - id: b
+        text: "The client credentials grant."
+        explanation: "Correct. The client sends its ID and a credential and gets a token for itself."
+      - id: c
+        text: "The device authorization grant."
+        explanation: "Not correct. That grant needs a person to approve on another device."
+      - id: d
+        text: "The implicit flow."
+        explanation: "Not correct. That flow is for a browser and a user, and it is turned off by default."
+    correct_option: b
+    explanation: "Correct. The client sends its ID and a credential and gets a token for itself."
+
+  - id: ats090-050-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what the token response leaves out"
+    source_readings:
+      - sections/section-050/module-01/course-01-the-client-credentials-grant.md
+    prompt: "Which of these does the response to a client credentials request not contain?"
+    options:
+      - id: a
+        text: "A refresh token."
+        explanation: "Correct. The response has no refresh token, because the client can ask again with its credentials."
+      - id: b
+        text: "An access token."
+        explanation: "Not correct. The response does contain an access token."
+      - id: c
+        text: "The lifetime in `expires_in`."
+        explanation: "Not correct. The response does contain the lifetime."
+      - id: d
+        text: "The token type `Bearer`."
+        explanation: "Not correct. The response does contain the token type."
+    correct_option: a
+    explanation: "Correct. The response has no refresh token, because the client can ask again with its credentials."
+
+  - id: ats090-050-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the settings the grant needs"
+    source_readings:
+      - sections/section-050/module-01/course-01-the-client-credentials-grant.md
+    prompt: "A client gets `unauthorized_client` from the client credentials grant although its secret is right. What is the most likely cause?"
+    options:
+      - id: a
+        text: "The realm has no users."
+        explanation: "Not correct. A realm needs no users for this grant."
+      - id: b
+        text: "The access token lifespan is too short."
+        explanation: "Not correct. A short lifespan does not stop the request."
+      - id: c
+        text: "The client has service accounts turned off."
+        explanation: "Correct. Keycloak allows the grant only for a confidential client with service accounts on."
+      - id: d
+        text: "The redirect URI is missing."
+        explanation: "Not correct. This grant does not use a redirect URI."
+    correct_option: c
+    explanation: "Correct. Keycloak allows the grant only for a confidential client with service accounts on."
+
+  - id: ats090-050-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the service account user"
+    source_readings:
+      - sections/section-050/module-01/course-02-service-accounts-and-roles.md
+    prompt: "What is the user name of the service account of the client `inventory-reporter`?"
+    options:
+      - id: a
+        text: "`inventory-reporter`."
+        explanation: "Not correct. That is the client ID, not the user name."
+      - id: b
+        text: "`service-account-inventory-reporter`."
+        explanation: "Correct. Keycloak prefixes the client ID with service-account-."
+      - id: c
+        text: "`reporter-service`."
+        explanation: "Not correct. Keycloak does not use this pattern."
+      - id: d
+        text: "`admin`."
+        explanation: "Not correct. The administrator is a different user in the master realm."
+    correct_option: b
+    explanation: "Correct. Keycloak prefixes the client ID with service-account-."
+
+  - id: ats090-050-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say where the roles of a service client come from"
+    source_readings:
+      - sections/section-050/module-01/course-02-service-accounts-and-roles.md
+    prompt: "A service client's token has no `inventory-reader` role. Where do you add the role?"
+    options:
+      - id: a
+        text: "On the client, as a client role of the API."
+        explanation: "Not correct. The service client holds no role itself in this setup."
+      - id: b
+        text: "In the token endpoint request, as a `role` field."
+        explanation: "Not correct. The request cannot choose roles."
+      - id: c
+        text: "In the realm settings, as a default token role."
+        explanation: "Not correct. A realm setting does not give one client a role."
+      - id: d
+        text: "As a role mapping on the service account user."
+        explanation: "Correct. The role mapping on the service account user reaches the token."
+    correct_option: d
+    explanation: "Correct. The role mapping on the service account user reaches the token."
+
+  - id: ats090-050-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know when a role change shows in a token"
+    source_readings:
+      - sections/section-050/module-01/course-02-service-accounts-and-roles.md
+    prompt: "You add a role to a service account. When does a token carry it?"
+    options:
+      - id: a
+        text: "In every token, even ones issued before the change."
+        explanation: "Not correct. A token keeps the roles it had when it was issued."
+      - id: b
+        text: "Only in tokens requested after the change."
+        explanation: "Correct. Keycloak writes roles into the token when it issues it."
+      - id: c
+        text: "Only after the client secret is regenerated."
+        explanation: "Not correct. The secret has no effect on roles."
+      - id: d
+        text: "Only after the realm restarts."
+        explanation: "Not correct. No restart is needed."
+    correct_option: b
+    explanation: "Correct. Keycloak writes roles into the token when it issues it."
+
+  - id: ats090-050-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Match a method to its value"
+    source_readings:
+      - sections/section-050/module-01/course-03-client-authentication-methods.md
+    prompt: "Which value of `clientAuthenticatorType` means the client signs a JWT with its private key?"
+    options:
+      - id: a
+        text: "`client-secret`."
+        explanation: "Not correct. That value means client ID and secret."
+      - id: b
+        text: "`client-x509`."
+        explanation: "Not correct. That value means a TLS client certificate."
+      - id: c
+        text: "`client-secret-jwt`."
+        explanation: "Not correct. That value signs the JWT with the client secret."
+      - id: d
+        text: "`client-jwt`."
+        explanation: "Correct. That value is Signed JWT, called private_key_jwt in OpenID Connect."
+    correct_option: d
+    explanation: "Correct. That value is Signed JWT, called private_key_jwt in OpenID Connect."
+
+  - id: ats090-050-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Diagnose a refused correct secret"
+    source_readings:
+      - sections/section-050/module-01/course-03-client-authentication-methods.md
+    prompt: "A client has the correct secret but gets `401` from the token endpoint after someone changed its settings. What do you check first?"
+    options:
+      - id: a
+        text: "`clientAuthenticatorType`, because the client may now accept another method."
+        explanation: "Correct. A client accepts only the method it is set to."
+      - id: b
+        text: "The access token lifespan."
+        explanation: "Not correct. The lifespan does not decide whether the request is accepted."
+      - id: c
+        text: "The users in the realm."
+        explanation: "Not correct. No user takes part in this grant."
+      - id: d
+        text: "The valid redirect URIs."
+        explanation: "Not correct. This grant has no redirect."
+    correct_option: a
+    explanation: "Correct. A client accepts only the method it is set to."
+
+  - id: ats090-050-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict the effect of regenerating a secret"
+    source_readings:
+      - sections/section-050/module-01/course-04-rotating-secrets-and-calling-apis.md
+    prompt: "You regenerate a client secret with no rotation policy. What happens to jobs that use the old secret?"
+    options:
+      - id: a
+        text: "They keep working for 24 hours."
+        explanation: "Not correct. Keycloak has no such default grace period."
+      - id: b
+        text: "They fail on their next token request."
+        explanation: "Correct. The old secret stops working at once."
+      - id: c
+        text: "They get a refresh token instead."
+        explanation: "Not correct. The client credentials grant gives no refresh token."
+      - id: d
+        text: "They switch to the new secret on their own."
+        explanation: "Not correct. A job must be given the new secret."
+    correct_option: b
+    explanation: "Correct. The old secret stops working at once."
+
+  - id: ats090-050-q10
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe good token handling"
+    source_readings:
+      - sections/section-050/module-01/course-04-rotating-secrets-and-calling-apis.md
+    prompt: "How should a service client treat the access token it gets?"
+    options:
+      - id: a
+        text: "Request a new token for every API call."
+        explanation: "Not correct. This wastes work on both sides."
+      - id: b
+        text: "Keep one token forever."
+        explanation: "Not correct. A token expires, so the client must renew it."
+      - id: c
+        text: "Keep it in memory and renew it shortly before `expires_in` runs out."
+        explanation: "Correct. This limits requests and still avoids an expired token."
+      - id: d
+        text: "Send it to Keycloak with every call."
+        explanation: "Not correct. The token goes to the API, not to Keycloak."
+    correct_option: c
+    explanation: "Correct. This limits requests and still avoids an expired token."

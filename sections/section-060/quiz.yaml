@@ -1,0 +1,245 @@
+# Knowledge check for section 060. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-060
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-060
+  title: "Token Lifetimes, Refresh Tokens And Sessions"
+placement:
+  position: after
+  reading: sections/section-060/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-060-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default access token lifespan"
+    source_readings:
+      - sections/section-060/module-01/course-01-token-and-session-lifespans.md
+    prompt: "What is the default Access Token Lifespan of a realm?"
+    options:
+      - id: a
+        text: "5 minutes (300 seconds)."
+        explanation: "Correct. The realm default is 300 seconds."
+      - id: b
+        text: "30 minutes (1800 seconds)."
+        explanation: "Not correct. That is the default SSO Session Idle time."
+      - id: c
+        text: "10 hours (36000 seconds)."
+        explanation: "Not correct. That is the default SSO Session Max time."
+      - id: d
+        text: "30 days (2592000 seconds)."
+        explanation: "Not correct. That is the default Offline Session Idle time."
+    correct_option: a
+    explanation: "Correct. The realm default is 300 seconds."
+
+  - id: ats090-060-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the lifetime from a token"
+    source_readings:
+      - sections/section-060/module-01/course-01-token-and-session-lifespans.md
+    prompt: "Which two claims of an access token show how long it lives?"
+    options:
+      - id: a
+        text: "`aud` and `azp`."
+        explanation: "Not correct. They name the audience and the client."
+      - id: b
+        text: "`iss` and `sub`."
+        explanation: "Not correct. They name the issuer and the subject."
+      - id: c
+        text: "`iat` and `exp`."
+        explanation: "Correct. The lifetime is `exp` minus `iat`."
+      - id: d
+        text: "`typ` and `scope`."
+        explanation: "Not correct. They give the type and the scopes."
+    correct_option: c
+    explanation: "Correct. The lifetime is `exp` minus `iat`."
+
+  - id: ats090-060-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict which lifespan applies"
+    source_readings:
+      - sections/section-060/module-01/course-01-token-and-session-lifespans.md
+    prompt: "The realm lifespan is 300 seconds and one client has `access.token.lifespan` set to 120. How long do that client's access tokens live?"
+    options:
+      - id: a
+        text: "120 seconds, because the client value overrides the realm."
+        explanation: "Correct. The client attribute wins for that client."
+      - id: b
+        text: "300 seconds, because the realm always wins."
+        explanation: "Not correct. A client attribute replaces the realm value."
+      - id: c
+        text: "420 seconds, the two values are added."
+        explanation: "Not correct. Keycloak does not add the values."
+      - id: d
+        text: "Until the SSO session ends."
+        explanation: "Not correct. The session does not set the access token lifetime."
+    correct_option: a
+    explanation: "Correct. The client attribute wins for that client."
+
+  - id: ats090-060-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe the refresh token grant"
+    source_readings:
+      - sections/section-060/module-01/course-02-the-refresh-token-grant-and-rotation.md
+    prompt: "What does a public client send to the token endpoint to refresh an access token?"
+    options:
+      - id: a
+        text: "`grant_type=refresh_token`, its client ID and the refresh token."
+        explanation: "Correct. A public client sends no secret."
+      - id: b
+        text: "`grant_type=password` and the user's password."
+        explanation: "Not correct. That is the password grant."
+      - id: c
+        text: "`grant_type=client_credentials` and its secret."
+        explanation: "Not correct. That grant has no user session to refresh."
+      - id: d
+        text: "Only the old access token."
+        explanation: "Not correct. The refresh token is required."
+    correct_option: a
+    explanation: "Correct. A public client sends no secret."
+
+  - id: ats090-060-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a reused refresh token"
+    source_readings:
+      - sections/section-060/module-01/course-02-the-refresh-token-grant-and-rotation.md
+    prompt: "Revoke Refresh Token is on and the maximum reuse is 0. A client uses the same refresh token twice. What happens the second time?"
+    options:
+      - id: a
+        text: "Keycloak answers `200` with new tokens."
+        explanation: "Not correct. Rotation refuses a used token."
+      - id: b
+        text: "Keycloak answers `400` with `invalid_grant`."
+        explanation: "Correct. Each refresh token works once with rotation on."
+      - id: c
+        text: "Keycloak logs the user out of all clients."
+        explanation: "Not correct. Keycloak only refuses the request."
+      - id: d
+        text: "Keycloak answers `204`."
+        explanation: "Not correct. `204` belongs to the logout endpoint."
+    correct_option: b
+    explanation: "Correct. Each refresh token works once with rotation on."
+
+  - id: ats090-060-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what an offline token is"
+    source_readings:
+      - sections/section-060/module-01/course-03-offline-tokens.md
+    prompt: "What makes a refresh token an offline token?"
+    options:
+      - id: a
+        text: "It has a longer signature."
+        explanation: "Not correct. The signature does not set the type."
+      - id: b
+        text: "It is requested with the scope `offline_access` and is stored in an offline session."
+        explanation: "Correct. The scope makes Keycloak store an offline session."
+      - id: c
+        text: "It is sent without a client ID."
+        explanation: "Not correct. The client ID is still required."
+      - id: d
+        text: "It is issued by the master realm."
+        explanation: "Not correct. The realm does not decide the type."
+    correct_option: b
+    explanation: "Correct. The scope makes Keycloak store an offline session."
+
+  - id: ats090-060-q07
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "List the conditions for an offline token"
+    source_readings:
+      - sections/section-060/module-01/course-03-offline-tokens.md
+    prompt: "A request for `offline_access` returns no offline token. Which two things do you check?"
+    options:
+      - id: a
+        text: "The redirect URI and the web origins."
+        explanation: "Not correct. They are not part of this request."
+      - id: b
+        text: "The access token lifespan and the SSO idle time."
+        explanation: "Not correct. They do not decide whether the token is offline."
+      - id: c
+        text: "The client's secret and the signature algorithm."
+        explanation: "Not correct. They do not decide the scope."
+      - id: d
+        text: "That the client has the optional scope `offline_access` and that the user has the role `offline_access`."
+        explanation: "Correct. Both must be present."
+    correct_option: d
+    explanation: "Correct. Both must be present."
+
+  - id: ats090-060-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know which setting limits an offline session"
+    source_readings:
+      - sections/section-060/module-01/course-03-offline-tokens.md
+    prompt: "Which realm attribute sets how long an offline session may stay unused?"
+    options:
+      - id: a
+        text: "`offlineSessionIdleTimeout`."
+        explanation: "Correct. It defaults to 30 days."
+      - id: b
+        text: "`ssoSessionIdleTimeout`."
+        explanation: "Not correct. It limits the SSO session, not the offline session."
+      - id: c
+        text: "`accessTokenLifespan`."
+        explanation: "Not correct. It limits the access token."
+      - id: d
+        text: "`refreshTokenMaxReuse`."
+        explanation: "Not correct. It limits reuse of a refresh token."
+    correct_option: a
+    explanation: "Correct. It defaults to 30 days."
+
+  - id: ats090-060-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what revocation stops"
+    source_readings:
+      - sections/section-060/module-01/course-04-ending-sessions-and-revoking-tokens.md
+    prompt: "A user logs out and the client revokes the refresh token. An API validates access tokens locally. What does it do with the access token issued before the logout?"
+    options:
+      - id: a
+        text: "It refuses it at once."
+        explanation: "Not correct. The API cannot know about the logout without asking Keycloak."
+      - id: b
+        text: "It accepts it until it expires."
+        explanation: "Correct. Local validation checks the signature, issuer, audience and expiry only."
+      - id: c
+        text: "It accepts it for one more minute."
+        explanation: "Not correct. There is no such grace period."
+      - id: d
+        text: "It converts it to a refresh token."
+        explanation: "Not correct. The API does not issue tokens."
+    correct_option: b
+    explanation: "Correct. Local validation checks the signature, issuer, audience and expiry only."
+
+  - id: ats090-060-q10
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the call that ends a session from a client"
+    source_readings:
+      - sections/section-060/module-01/course-04-ending-sessions-and-revoking-tokens.md
+    prompt: "Which request lets a client end the session of a user with the refresh token?"
+    options:
+      - id: a
+        text: "`GET /realms/<realm>/.well-known/openid-configuration`."
+        explanation: "Not correct. That returns the discovery document."
+      - id: b
+        text: "`POST` to the token endpoint with `grant_type=password`."
+        explanation: "Not correct. That signs a user in."
+      - id: c
+        text: "`POST` to the JWKS endpoint."
+        explanation: "Not correct. That endpoint lists public keys."
+      - id: d
+        text: "`POST /realms/<realm>/protocol/openid-connect/logout` with the client ID and the refresh token."
+        explanation: "Correct. Keycloak ends the session and answers `204`."
+    correct_option: d
+    explanation: "Correct. Keycloak ends the session and answers `204`."

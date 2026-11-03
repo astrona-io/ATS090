@@ -29,6 +29,9 @@ contains:
 | [020](sections/section-020) | The Authorization Code Flow With PKCE | 1 | 1 + capstone | Browser sign-in |
 | [030](sections/section-030) | Validating Access Tokens In An API | 1 | 1 + capstone | Token validation |
 | [040](sections/section-040) | Token Propagation Through An API Gateway | 1 | 1 + capstone | Token propagation |
+| [050](sections/section-050) | Client Credentials And Service Accounts | 1 | 1 + capstone | Service clients |
+| [060](sections/section-060) | Token Lifetimes, Refresh Tokens And Sessions | 1 | 1 + capstone | Token lifetimes and sessions |
+| [080](sections/section-080) | Client Scopes, Protocol Mappers And Token Claims | 1 | 1 + capstone | Client scopes, mappers and token claims |
 
 The order follows one request: how the application is registered in
 Keycloak, how the user signs in through it, how the API checks the token it
@@ -44,6 +47,9 @@ receives, and how the token travels through a gateway to a second API.
 | 020-01 | [Sign Users In With The Authorization Code Flow And PKCE](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
 | 030-01 | [Validate Access Tokens In An API](sections/section-030/module-01/course.md) | 4 | [lab-01](sections/section-030/module-01/labs/lab-01) |
 | 040-01 | [Propagate Tokens Through An API Gateway](sections/section-040/module-01/course.md) | 3 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 050-01 | [Authenticate Service Clients With Client Credentials](sections/section-050/module-01/course.md) | 4 | [lab-01](sections/section-050/module-01/labs/lab-01) |
+| 060-01 | [Control Token Lifetimes, Refresh Tokens And Sessions](sections/section-060/module-01/course.md) | 4 | [lab-01](sections/section-060/module-01/labs/lab-01) |
+| 080-01 | [Shape Tokens With Client Scopes And Protocol Mappers](sections/section-080/module-01/course.md) | 4 | [lab-01](sections/section-080/module-01/labs/lab-01) |
 
 ---
 
@@ -55,6 +61,9 @@ receives, and how the token travels through a gateway to a second API.
 | [020](sections/section-020/capstone/labs/lab-01) | Repair The Login Of A Single Page Application | a confidential browser client, the standard flow off, a mistyped redirect URI, no PKCE |
 | [030](sections/section-030/capstone/labs/lab-01) | Make An API Accept The Right Tokens | no audience, a missing realm role, the roles scope removed from the client |
 | [040](sections/section-040/capstone/labs/lab-01) | Propagate A User To A Second API | subject token without the gateway audience, exchange off, an audience not available, a missing role |
+| [050](sections/section-050/capstone/labs/lab-01) | Secure The Service Clients Of A Realm | a signed-JWT-only client, a leaked secret, a public client that should be a service client, a missing role |
+| [060](sections/section-060/capstone/labs/lab-01) | Fix The Token Lifetimes Of A Client | a client override of one day, no refresh token rotation, the offline_access scope removed from the client, a one-minute offline idle time |
+| [080](sections/section-080/capstone/labs/lab-01) | Repair The Token Contents Of A Client | a groups mapper that skips the access token, Full Scope Allowed leaking an admin role, a needed client scope that is only optional |
 
 ---
 

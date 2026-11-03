@@ -21,7 +21,9 @@ training:
     code flow with PKCE, state, nonce and the ID token, validating access
     tokens in an API with the JWKS, the issuer, the audience and roles,
     audience mappers and client scopes, token introspection, and token
-    propagation through an API gateway with standard token exchange. Each
+    propagation through an API gateway with standard token exchange, client
+    credentials and service accounts, token and session lifetimes with refresh
+    tokens, and client scopes, protocol mappers and token claims. Each
     module pairs a layered reader with an ungraded hands-on playground and a
     graded practice lab. Each section closes with an integration capstone.
     Written for Keycloak 26.8.1.
@@ -363,6 +365,234 @@ modules:
       - type: quiz
         title: "Knowledge Check: Token Propagation Through An API Gateway"
         path: sections/section-040/quiz.yaml
+        pass_score: 70
+  - id: module-050
+    title: "Client Credentials And Service Accounts"
+    description: >
+      Machine-to-machine access: the client credentials grant, service account users and their roles,
+      the client authentication methods, and rotating a client secret without breaking a job.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-050/README.md
+
+      - type: reading
+        title: "Authenticate Service Clients With Client Credentials"
+        path: sections/section-050/module-01/course.md
+      - type: reading
+        title: "The Client Credentials Grant"
+        path: sections/section-050/module-01/course-01-the-client-credentials-grant.md
+      - type: reading
+        title: "Service Accounts And Their Roles"
+        path: sections/section-050/module-01/course-02-service-accounts-and-roles.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Service Client Lab"
+        path: sections/section-050/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: service-accounts
+        task_kind: troubleshooting
+        tags: [client-credentials, service-account, confidential-client, realm-roles, kcadm]
+        learning_goals:
+          - Read why Keycloak refuses a client credentials request
+          - Turn on service accounts for a confidential client
+          - Give the service account the one role the API needs and prove it in a new token
+        resources:
+          - name: "Server Administration Guide: service accounts"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_service_accounts
+          - name: "Securing applications: OpenID Connect"
+            url: https://www.keycloak.org/securing-apps/oidc-layers
+      - type: reading
+        title: "Client Authentication Methods"
+        path: sections/section-050/module-01/course-03-client-authentication-methods.md
+      - type: reading
+        title: "Rotating Secrets And Calling APIs"
+        path: sections/section-050/module-01/course-04-rotating-secrets-and-calling-apis.md
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-050/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Secure The Service Clients Of A Realm Capstone"
+        path: sections/section-050/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: service-clients
+        task_kind: troubleshooting
+        tags: [client-credentials, client-secret, secret-rotation, service-account, client-authentication]
+        learning_goals:
+          - Find the client setting that makes a correct secret fail
+          - Rotate a leaked secret so the old value stops working
+          - Turn a public client into a confidential service client with the right role
+        resources:
+          - name: "Server Administration Guide: client credentials"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client-credentials
+          - name: "Server Administration Guide: client authentication"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_authentication
+          - name: "Securing applications: OpenID Connect"
+            url: https://www.keycloak.org/securing-apps/oidc-layers
+      - type: quiz
+        title: "Knowledge Check: Client Credentials And Service Accounts"
+        path: sections/section-050/quiz.yaml
+        pass_score: 70
+  - id: module-060
+    title: "Token Lifetimes, Refresh Tokens And Sessions"
+    description: >
+      How long tokens and sessions live: the access token lifespan, SSO session limits, the refresh
+      token grant and rotation, offline tokens, and ending sessions and revoking tokens.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-060/README.md
+
+      - type: reading
+        title: "Control Token Lifetimes, Refresh Tokens And Sessions"
+        path: sections/section-060/module-01/course.md
+      - type: reading
+        title: "Token And Session Lifespans"
+        path: sections/section-060/module-01/course-01-token-and-session-lifespans.md
+      - type: reading
+        title: "The Refresh Token Grant And Rotation"
+        path: sections/section-060/module-01/course-02-the-refresh-token-grant-and-rotation.md
+      - type: reading
+        title: Question
+        path: sections/section-060/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Shorten Access Tokens And Rotate Refresh Tokens Lab"
+        path: sections/section-060/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: token-lifetimes
+        task_kind: troubleshooting
+        tags: [access-token-lifespan, refresh-token, token-rotation, realm-settings, kcadm]
+        learning_goals:
+          - Set the realm access token lifespan and verify it in a token
+          - Turn on refresh token rotation with no reuse
+          - Prove that a refresh token works once
+        resources:
+          - name: "Server Administration Guide: session and token timeouts"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_timeouts
+          - name: "Server Administration Guide: offline access"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_offline-access
+      - type: reading
+        title: "Offline Tokens"
+        path: sections/section-060/module-01/course-03-offline-tokens.md
+      - type: reading
+        title: "Ending Sessions And Revoking Tokens"
+        path: sections/section-060/module-01/course-04-ending-sessions-and-revoking-tokens.md
+      - type: reading
+        title: Summary
+        path: sections/section-060/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-060/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Fix The Token Lifetimes Of A Client Capstone"
+        path: sections/section-060/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: token-lifetimes
+        task_kind: troubleshooting
+        tags: [access-token-lifespan, client-override, offline-access, refresh-token, token-rotation]
+        learning_goals:
+          - Find a client override that hides the realm access token lifespan
+          - Restore the optional offline_access scope on a client
+          - Set rotation and the offline idle time and prove each with a request
+        resources:
+          - name: "Server Administration Guide: session and token timeouts"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_timeouts
+          - name: "Server Administration Guide: offline access"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_offline-access
+          - name: "Server Administration Guide: client scopes"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_scopes
+      - type: quiz
+        title: "Knowledge Check: Token Lifetimes, Refresh Tokens And Sessions"
+        path: sections/section-060/quiz.yaml
+        pass_score: 70
+  - id: module-080
+    title: "Client Scopes, Protocol Mappers And Token Claims"
+    description: >
+      How tokens get their contents: default and optional client scopes, protocol mappers and custom
+      claims, roles in tokens with Full Scope Allowed and scope mappings, and which token carries what.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-080/README.md
+
+      - type: reading
+        title: "Shape Tokens With Client Scopes And Protocol Mappers"
+        path: sections/section-080/module-01/course.md
+      - type: reading
+        title: "Client Scopes: Default And Optional"
+        path: sections/section-080/module-01/course-01-client-scopes-default-and-optional.md
+      - type: reading
+        title: "Protocol Mappers And Custom Claims"
+        path: sections/section-080/module-01/course-02-protocol-mappers-and-custom-claims.md
+      - type: reading
+        title: Question
+        path: sections/section-080/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Add Group And Tenant Claims To A Client Lab"
+        path: sections/section-080/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: protocol-mappers
+        task_kind: troubleshooting
+        tags: [protocol-mapper, group-membership, hardcoded-claim, access-token, kcadm]
+        learning_goals:
+          - Add a group membership mapper and a hardcoded claim mapper to a client
+          - Choose which tokens receive each claim
+          - Verify the claims by decoding real tokens
+        resources:
+          - name: "Server Administration Guide: client scopes"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_scopes
+          - name: "Server Administration Guide: protocol mappers"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_protocol-mappers
+      - type: reading
+        title: "Roles In Tokens: Full Scope And Scope Mappings"
+        path: sections/section-080/module-01/course-03-roles-in-tokens-full-scope-and-scope-mappings.md
+      - type: reading
+        title: "Which Token Carries What"
+        path: sections/section-080/module-01/course-04-which-token-carries-what.md
+      - type: reading
+        title: Summary
+        path: sections/section-080/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-080/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair The Token Contents Of A Client Capstone"
+        path: sections/section-080/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: protocol-mappers
+        task_kind: troubleshooting
+        tags: [client-scopes, protocol-mapper, full-scope-allowed, scope-mapping, access-token]
+        learning_goals:
+          - Find a mapper whose access token switch is off
+          - Limit the roles in a token with Full Scope Allowed and a scope mapping
+          - Move a client scope from optional to default and prove each change in a token
+        resources:
+          - name: "Server Administration Guide: client scopes"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_scopes
+          - name: "Server Administration Guide: protocol mappers"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_protocol-mappers
+          - name: "Server Administration Guide: role scope mappings"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_role_scope_mappings
+      - type: quiz
+        title: "Knowledge Check: Client Scopes, Protocol Mappers And Token Claims"
+        path: sections/section-080/quiz.yaml
         pass_score: 70
       - type: quiz
         title: "Final Domain Quiz"

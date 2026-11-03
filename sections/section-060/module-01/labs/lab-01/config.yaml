@@ -1,0 +1,52 @@
+# Shorten Access Tokens And Rotate Refresh Tokens
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-lab-060-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-lab-060-01-setup"
+      description: "Creates the realm inventory with day-long access tokens and refresh tokens that can be reused"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-realm-settings"
+      description: "Confirms the realm has a short access token lifespan and refresh token rotation"
+      type: "file"
+      source: "validation/validate-realm-settings.sh"
+    - name: "validate-access-token-lifetime"
+      description: "Confirms a new access token lives 600 seconds or less"
+      type: "file"
+      source: "validation/validate-access-token-lifetime.sh"
+    - name: "validate-refresh-rotation"
+      description: "Confirms a refresh token works once and a second use is refused"
+      type: "file"
+      source: "validation/validate-refresh-rotation.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/keycloak/keycloak:26.8.1

@@ -1,4 +1,4 @@
-# Final domain quiz. Listed in astrona.yaml as the last `type: quiz` entry. Three questions from each section.
+# Final domain quiz. Listed in astrona.yaml as the last `type: quiz` entry. Questions from every section.
 schema_version: 1
 kind: question_bank
 id: ats090-final
@@ -286,3 +286,207 @@ questions:
         explanation: "Not correct. An exchange adds no permissions."
     correct_option: c
     explanation: "Correct. The audience check passes. The role check fails."
+  - id: ats090-final-q050a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what the token response leaves out"
+    source_readings:
+      - sections/section-050/module-01/course-01-the-client-credentials-grant.md
+    prompt: "Which of these does the response to a client credentials request not contain?"
+    options:
+      - id: a
+        text: "A refresh token."
+        explanation: "Correct. The response has no refresh token, because the client can ask again with its credentials."
+      - id: b
+        text: "An access token."
+        explanation: "Not correct. The response does contain an access token."
+      - id: c
+        text: "The lifetime in `expires_in`."
+        explanation: "Not correct. The response does contain the lifetime."
+      - id: d
+        text: "The token type `Bearer`."
+        explanation: "Not correct. The response does contain the token type."
+    correct_option: a
+    explanation: "Correct. The response has no refresh token, because the client can ask again with its credentials."
+
+  - id: ats090-final-q050b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say where the roles of a service client come from"
+    source_readings:
+      - sections/section-050/module-01/course-02-service-accounts-and-roles.md
+    prompt: "A service client's token has no `inventory-reader` role. Where do you add the role?"
+    options:
+      - id: a
+        text: "On the client, as a client role of the API."
+        explanation: "Not correct. The service client holds no role itself in this setup."
+      - id: b
+        text: "In the token endpoint request, as a `role` field."
+        explanation: "Not correct. The request cannot choose roles."
+      - id: c
+        text: "In the realm settings, as a default token role."
+        explanation: "Not correct. A realm setting does not give one client a role."
+      - id: d
+        text: "As a role mapping on the service account user."
+        explanation: "Correct. The role mapping on the service account user reaches the token."
+    correct_option: d
+    explanation: "Correct. The role mapping on the service account user reaches the token."
+
+  - id: ats090-final-q050c
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict the effect of regenerating a secret"
+    source_readings:
+      - sections/section-050/module-01/course-04-rotating-secrets-and-calling-apis.md
+    prompt: "You regenerate a client secret with no rotation policy. What happens to jobs that use the old secret?"
+    options:
+      - id: a
+        text: "They keep working for 24 hours."
+        explanation: "Not correct. Keycloak has no such default grace period."
+      - id: b
+        text: "They fail on their next token request."
+        explanation: "Correct. The old secret stops working at once."
+      - id: c
+        text: "They get a refresh token instead."
+        explanation: "Not correct. The client credentials grant gives no refresh token."
+      - id: d
+        text: "They switch to the new secret on their own."
+        explanation: "Not correct. A job must be given the new secret."
+    correct_option: b
+    explanation: "Correct. The old secret stops working at once."
+  - id: ats090-final-q060a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the lifetime from a token"
+    source_readings:
+      - sections/section-060/module-01/course-01-token-and-session-lifespans.md
+    prompt: "Which two claims of an access token show how long it lives?"
+    options:
+      - id: a
+        text: "`aud` and `azp`."
+        explanation: "Not correct. They name the audience and the client."
+      - id: b
+        text: "`iss` and `sub`."
+        explanation: "Not correct. They name the issuer and the subject."
+      - id: c
+        text: "`iat` and `exp`."
+        explanation: "Correct. The lifetime is `exp` minus `iat`."
+      - id: d
+        text: "`typ` and `scope`."
+        explanation: "Not correct. They give the type and the scopes."
+    correct_option: c
+    explanation: "Correct. The lifetime is `exp` minus `iat`."
+
+  - id: ats090-final-q060b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a reused refresh token"
+    source_readings:
+      - sections/section-060/module-01/course-02-the-refresh-token-grant-and-rotation.md
+    prompt: "Revoke Refresh Token is on and the maximum reuse is 0. A client uses the same refresh token twice. What happens the second time?"
+    options:
+      - id: a
+        text: "Keycloak answers `200` with new tokens."
+        explanation: "Not correct. Rotation refuses a used token."
+      - id: b
+        text: "Keycloak answers `400` with `invalid_grant`."
+        explanation: "Correct. Each refresh token works once with rotation on."
+      - id: c
+        text: "Keycloak logs the user out of all clients."
+        explanation: "Not correct. Keycloak only refuses the request."
+      - id: d
+        text: "Keycloak answers `204`."
+        explanation: "Not correct. `204` belongs to the logout endpoint."
+    correct_option: b
+    explanation: "Correct. Each refresh token works once with rotation on."
+
+  - id: ats090-final-q060c
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what revocation stops"
+    source_readings:
+      - sections/section-060/module-01/course-04-ending-sessions-and-revoking-tokens.md
+    prompt: "A user logs out and the client revokes the refresh token. An API validates access tokens locally. What does it do with the access token issued before the logout?"
+    options:
+      - id: a
+        text: "It refuses it at once."
+        explanation: "Not correct. The API cannot know about the logout without asking Keycloak."
+      - id: b
+        text: "It accepts it until it expires."
+        explanation: "Correct. Local validation checks the signature, issuer, audience and expiry only."
+      - id: c
+        text: "It accepts it for one more minute."
+        explanation: "Not correct. There is no such grace period."
+      - id: d
+        text: "It converts it to a refresh token."
+        explanation: "Not correct. The API does not issue tokens."
+    correct_option: b
+    explanation: "Correct. Local validation checks the signature, issuer, audience and expiry only."
+  - id: ats090-final-q080a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell default from optional scopes"
+    source_readings:
+      - sections/section-080/module-01/course-01-client-scopes-default-and-optional.md
+    prompt: "When does an optional client scope apply to a token?"
+    options:
+      - id: a
+        text: "For every token request of the client."
+        explanation: "Not correct. That describes a default scope."
+      - id: b
+        text: "Only when the request names it in the `scope` parameter."
+        explanation: "Correct. The parameter switches it on for that request."
+      - id: c
+        text: "Only for users with an admin role."
+        explanation: "Not correct. Roles do not decide this."
+      - id: d
+        text: "Only for the ID token."
+        explanation: "Not correct. Scopes affect all tokens that their mappers target."
+    correct_option: b
+    explanation: "Correct. The parameter switches it on for that request."
+
+  - id: ats090-final-q080b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the full.path setting"
+    source_readings:
+      - sections/section-080/module-01/course-02-protocol-mappers-and-custom-claims.md
+    prompt: "A group membership mapper has `full.path` set to `true`. What does the claim hold for the group `logistics`?"
+    options:
+      - id: a
+        text: "`logistics`."
+        explanation: "Not correct. That is the value with `full.path` false."
+      - id: b
+        text: "`/logistics`."
+        explanation: "Correct. The claim holds the path of the group."
+      - id: c
+        text: "The ID of the group."
+        explanation: "Not correct. The mapper writes names or paths, not IDs."
+      - id: d
+        text: "Nothing, the claim stays empty."
+        explanation: "Not correct. The mapper still writes a value."
+    correct_option: b
+    explanation: "Correct. The claim holds the path of the group."
+
+  - id: ats090-final-q080c
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the reader of the ID token"
+    source_readings:
+      - sections/section-080/module-01/course-04-which-token-carries-what.md
+    prompt: "Who is the ID token meant for?"
+    options:
+      - id: a
+        text: "The API that receives requests."
+        explanation: "Not correct. That is the access token."
+      - id: b
+        text: "The client application, to learn who signed in."
+        explanation: "Correct. Its audience is the client."
+      - id: c
+        text: "The Keycloak database."
+        explanation: "Not correct. The database does not read tokens."
+      - id: d
+        text: "The refresh token endpoint."
+        explanation: "Not correct. The endpoint reads the refresh token."
+    correct_option: b
+    explanation: "Correct. Its audience is the client."

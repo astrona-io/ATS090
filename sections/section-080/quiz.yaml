@@ -1,0 +1,245 @@
+# Knowledge check for section 080. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-080
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-080
+  title: "Client Scopes, Protocol Mappers And Token Claims"
+placement:
+  position: after
+  reading: sections/section-080/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-080-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say what a client scope is"
+    source_readings:
+      - sections/section-080/module-01/course-01-client-scopes-default-and-optional.md
+    prompt: "What does a client scope hold?"
+    options:
+      - id: a
+        text: "A user's password and credentials."
+        explanation: "Not correct. Credentials belong to the user."
+      - id: b
+        text: "A named set of protocol mappers and role scope mappings that clients share."
+        explanation: "Correct. Clients use the scope to get the same claims."
+      - id: c
+        text: "The redirect URIs of a client."
+        explanation: "Not correct. Redirect URIs are client settings."
+      - id: d
+        text: "The signing keys of the realm."
+        explanation: "Not correct. Keys belong to the realm."
+    correct_option: b
+    explanation: "Correct. Clients use the scope to get the same claims."
+
+  - id: ats090-080-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell default from optional scopes"
+    source_readings:
+      - sections/section-080/module-01/course-01-client-scopes-default-and-optional.md
+    prompt: "When does an optional client scope apply to a token?"
+    options:
+      - id: a
+        text: "For every token request of the client."
+        explanation: "Not correct. That describes a default scope."
+      - id: b
+        text: "Only when the request names it in the `scope` parameter."
+        explanation: "Correct. The parameter switches it on for that request."
+      - id: c
+        text: "Only for users with an admin role."
+        explanation: "Not correct. Roles do not decide this."
+      - id: d
+        text: "Only for the ID token."
+        explanation: "Not correct. Scopes affect all tokens that their mappers target."
+    correct_option: b
+    explanation: "Correct. The parameter switches it on for that request."
+
+  - id: ats090-080-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Fix a claim that an application cannot request"
+    source_readings:
+      - sections/section-080/module-01/course-01-client-scopes-default-and-optional.md
+    prompt: "An application cannot send the `scope` parameter, and its tokens need the claim of a client scope. What do you do?"
+    options:
+      - id: a
+        text: "Make the scope a default scope of the client."
+        explanation: "Correct. Default scopes apply without the parameter."
+      - id: b
+        text: "Leave it optional and restart the client."
+        explanation: "Not correct. The scope stays off without the parameter."
+      - id: c
+        text: "Rename the scope."
+        explanation: "Not correct. The name does not change when it applies."
+      - id: d
+        text: "Delete the mapper."
+        explanation: "Not correct. That removes the claim."
+    correct_option: a
+    explanation: "Correct. Default scopes apply without the parameter."
+
+  - id: ats090-080-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the mapper for group names"
+    source_readings:
+      - sections/section-080/module-01/course-02-protocol-mappers-and-custom-claims.md
+    prompt: "Which mapper type writes the names of the user's groups into a claim?"
+    options:
+      - id: a
+        text: "`oidc-hardcoded-claim-mapper`."
+        explanation: "Not correct. It writes a fixed value."
+      - id: b
+        text: "`oidc-usermodel-property-mapper`."
+        explanation: "Not correct. It copies a user property such as email."
+      - id: c
+        text: "`oidc-group-membership-mapper`."
+        explanation: "Correct. It writes group names or paths."
+      - id: d
+        text: "`oidc-audience-mapper`."
+        explanation: "Not correct. It adds an audience."
+    correct_option: c
+    explanation: "Correct. It writes group names or paths."
+
+  - id: ats090-080-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the full.path setting"
+    source_readings:
+      - sections/section-080/module-01/course-02-protocol-mappers-and-custom-claims.md
+    prompt: "A group membership mapper has `full.path` set to `true`. What does the claim hold for the group `logistics`?"
+    options:
+      - id: a
+        text: "`logistics`."
+        explanation: "Not correct. That is the value with `full.path` false."
+      - id: b
+        text: "`/logistics`."
+        explanation: "Correct. The claim holds the path of the group."
+      - id: c
+        text: "The ID of the group."
+        explanation: "Not correct. The mapper writes names or paths, not IDs."
+      - id: d
+        text: "Nothing, the claim stays empty."
+        explanation: "Not correct. The mapper still writes a value."
+    correct_option: b
+    explanation: "Correct. The claim holds the path of the group."
+
+  - id: ats090-080-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a claim missing from the ID token"
+    source_readings:
+      - sections/section-080/module-01/course-02-protocol-mappers-and-custom-claims.md
+    prompt: "A hardcoded claim mapper has `access.token.claim` true and `id.token.claim` false. Where does the claim appear?"
+    options:
+      - id: a
+        text: "In the ID token only."
+        explanation: "Not correct. The ID token switch is off."
+      - id: b
+        text: "In both tokens."
+        explanation: "Not correct. Each token has its own switch."
+      - id: c
+        text: "In the access token only."
+        explanation: "Correct. Only the switch that is on writes the claim."
+      - id: d
+        text: "In neither token."
+        explanation: "Not correct. The access token switch is on."
+    correct_option: c
+    explanation: "Correct. Only the switch that is on writes the claim."
+
+  - id: ats090-080-q07
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain why a custom attribute claim is empty"
+    source_readings:
+      - sections/section-080/module-01/course-02-protocol-mappers-and-custom-claims.md
+    prompt: "A user attribute mapper writes no claim for a custom attribute. What is the likely cause?"
+    options:
+      - id: a
+        text: "The attribute is not declared in the realm's user profile, so Keycloak does not store it."
+        explanation: "Correct. Undeclared attributes are not stored."
+      - id: b
+        text: "The access token lifespan is too short."
+        explanation: "Not correct. The lifespan does not affect claims."
+      - id: c
+        text: "The client is public."
+        explanation: "Not correct. Public clients can use mappers."
+      - id: d
+        text: "The token is a JWT."
+        explanation: "Not correct. JWT is the normal format."
+    correct_option: a
+    explanation: "Correct. Undeclared attributes are not stored."
+
+  - id: ats090-080-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict the roles in a token"
+    source_readings:
+      - sections/section-080/module-01/course-03-roles-in-tokens-full-scope-and-scope-mappings.md
+    prompt: "Full Scope Allowed is off and the client has a scope mapping for `inventory-reader` only. The user holds `inventory-reader` and `inventory-admin`. Which roles reach the token?"
+    options:
+      - id: a
+        text: "Both roles."
+        explanation: "Not correct. The admin role is not in the scope mappings."
+      - id: b
+        text: "`inventory-admin` only."
+        explanation: "Not correct. The scope mapping allows the reader."
+      - id: c
+        text: "Neither role."
+        explanation: "Not correct. The reader role is allowed and held."
+      - id: d
+        text: "`inventory-reader` only."
+        explanation: "Correct. A role needs to be held and allowed."
+    correct_option: d
+    explanation: "Correct. A role needs to be held and allowed."
+
+  - id: ats090-080-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the reader of the ID token"
+    source_readings:
+      - sections/section-080/module-01/course-04-which-token-carries-what.md
+    prompt: "Who is the ID token meant for?"
+    options:
+      - id: a
+        text: "The API that receives requests."
+        explanation: "Not correct. That is the access token."
+      - id: b
+        text: "The client application, to learn who signed in."
+        explanation: "Correct. Its audience is the client."
+      - id: c
+        text: "The Keycloak database."
+        explanation: "Not correct. The database does not read tokens."
+      - id: d
+        text: "The refresh token endpoint."
+        explanation: "Not correct. The endpoint reads the refresh token."
+    correct_option: b
+    explanation: "Correct. Its audience is the client."
+
+  - id: ats090-080-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Decide where a claim for an API belongs"
+    source_readings:
+      - sections/section-080/module-01/course-04-which-token-carries-what.md
+    prompt: "An API decides on the claim `tenant`. In which token must the mapper write it?"
+    options:
+      - id: a
+        text: "The access token, with Add to access token on."
+        explanation: "Correct. The API reads the access token."
+      - id: b
+        text: "Only the ID token."
+        explanation: "Not correct. The API must not accept an ID token."
+      - id: c
+        text: "Only the refresh token."
+        explanation: "Not correct. The API does not read refresh tokens."
+      - id: d
+        text: "Only the UserInfo response."
+        explanation: "Not correct. The API does not call UserInfo for each request."
+    correct_option: a
+    explanation: "Correct. The API reads the access token."
