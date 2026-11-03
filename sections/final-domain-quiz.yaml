@@ -490,3 +490,71 @@ questions:
         explanation: "Not correct. The endpoint reads the refresh token."
     correct_option: b
     explanation: "Correct. Its audience is the client."
+  - id: ats090-final-q070a
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict an access token after logout"
+    source_readings:
+      - sections/section-070/module-01/course-01-how-keycloak-sessions-end.md
+    prompt: "An API validates access tokens locally. A user logs out. What does the API do with the access token issued before the logout?"
+    options:
+      - id: a
+        text: "Refuses it at once."
+        explanation: "Not correct. The API does not ask Keycloak."
+      - id: b
+        text: "Accepts it until it expires."
+        explanation: "Correct. It checks signature, issuer, audience and expiry only."
+      - id: c
+        text: "Accepts it for one more minute."
+        explanation: "Not correct. There is no grace period."
+      - id: d
+        text: "Turns it into a refresh token."
+        explanation: "Not correct. An API does not issue tokens."
+    correct_option: b
+    explanation: "Correct. It checks signature, issuer, audience and expiry only."
+
+  - id: ats090-final-q070b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what id_token_hint does"
+    source_readings:
+      - sections/section-070/module-01/course-02-rp-initiated-logout-and-post-logout-redirects.md
+    prompt: "What does `id_token_hint` tell Keycloak in a browser logout?"
+    options:
+      - id: a
+        text: "Which redirect address to use."
+        explanation: "Not correct. That is `post_logout_redirect_uri`."
+      - id: b
+        text: "Which session and client the logout is for."
+        explanation: "Correct. The ID token identifies them."
+      - id: c
+        text: "How long the session may live."
+        explanation: "Not correct. Limits are realm settings."
+      - id: d
+        text: "Which user to create."
+        explanation: "Not correct. The endpoint does not create users."
+    correct_option: b
+    explanation: "Correct. The ID token identifies them."
+
+  - id: ats090-final-q070c
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the command that ends all sessions of one user"
+    source_readings:
+      - sections/section-070/module-01/course-04-administering-sessions.md
+    prompt: "Which admin call ends all sessions of one user and no others?"
+    options:
+      - id: a
+        text: "`POST logout-all`."
+        explanation: "Not correct. That ends every session of the realm."
+      - id: b
+        text: "`POST users/<id>/logout`."
+        explanation: "Correct. It removes that user's sessions."
+      - id: c
+        text: "`DELETE realms/inventory`."
+        explanation: "Not correct. That deletes the realm."
+      - id: d
+        text: "`PUT clients/<id>`."
+        explanation: "Not correct. That changes a client."
+    correct_option: b
+    explanation: "Correct. It removes that user's sessions."

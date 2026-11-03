@@ -518,6 +518,80 @@ modules:
         title: "Knowledge Check: Token Lifetimes, Refresh Tokens And Sessions"
         path: sections/section-060/quiz.yaml
         pass_score: 70
+  - id: module-070
+    title: "Logout, Back-Channel Logout And Session Control"
+    description: >
+      Ending sessions: how a session ends, RP-initiated logout and post-logout redirects, back-channel
+      and front-channel logout, and administering sessions with the admin API and realm limits.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-070/README.md
+
+      - type: reading
+        title: "End Sessions With Logout And Admin Control"
+        path: sections/section-070/module-01/course.md
+      - type: reading
+        title: "How Keycloak Sessions End"
+        path: sections/section-070/module-01/course-01-how-keycloak-sessions-end.md
+      - type: reading
+        title: "RP-Initiated Logout And Post-Logout Redirects"
+        path: sections/section-070/module-01/course-02-rp-initiated-logout-and-post-logout-redirects.md
+      - type: reading
+        title: "Back-Channel And Front-Channel Logout"
+        path: sections/section-070/module-01/course-03-back-channel-and-front-channel-logout.md
+      - type: reading
+        title: "Administering Sessions"
+        path: sections/section-070/module-01/course-04-administering-sessions.md
+      - type: reading
+        title: Question
+        path: sections/section-070/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Sign Out A User Everywhere Lab"
+        path: sections/section-070/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: session-administration
+        task_kind: troubleshooting
+        tags: [sessions, logout, admin-api, sso-session-idle, kcadm]
+        learning_goals:
+          - List and end the sessions of one user with the admin API
+          - Set the SSO session idle limit
+          - Check the result without disabling the user
+        resources:
+          - name: "Server Administration Guide: managing user sessions"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#managing-user-sessions
+          - name: "Server Administration Guide: session and token timeouts"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_timeouts
+      - type: reading
+        title: Summary
+        path: sections/section-070/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-070/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair The Logout Of A Client Capstone"
+        path: sections/section-070/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: logout-configuration
+        task_kind: troubleshooting
+        tags: [logout, backchannel-logout, post-logout-redirect, sessions, kcadm]
+        learning_goals:
+          - Replace a wildcard post-logout redirect with an exact address
+          - Configure back-channel logout with the session id
+          - End the sessions of a user and verify the list is empty
+        resources:
+          - name: "Server Administration Guide: managing user sessions"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#managing-user-sessions
+          - name: "Server Administration Guide: OIDC logout"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc-logout
+      - type: quiz
+        title: "Knowledge Check: Logout, Back-Channel Logout And Session Control"
+        path: sections/section-070/quiz.yaml
+        pass_score: 70
   - id: module-080
     title: "Client Scopes, Protocol Mappers And Token Claims"
     description: >

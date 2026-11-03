@@ -31,6 +31,7 @@ contains:
 | [040](sections/section-040) | Token Propagation Through An API Gateway | 1 | 1 + capstone | Token propagation |
 | [050](sections/section-050) | Client Credentials And Service Accounts | 1 | 1 + capstone | Service clients |
 | [060](sections/section-060) | Token Lifetimes, Refresh Tokens And Sessions | 1 | 1 + capstone | Token lifetimes and sessions |
+| [070](sections/section-070) | Logout, Back-Channel Logout And Session Control | 1 | 1 + capstone | Logout and session control |
 | [080](sections/section-080) | Client Scopes, Protocol Mappers And Token Claims | 1 | 1 + capstone | Client scopes, mappers and token claims |
 
 The order follows one request: how the application is registered in
@@ -49,6 +50,7 @@ receives, and how the token travels through a gateway to a second API.
 | 040-01 | [Propagate Tokens Through An API Gateway](sections/section-040/module-01/course.md) | 3 | [lab-01](sections/section-040/module-01/labs/lab-01) |
 | 050-01 | [Authenticate Service Clients With Client Credentials](sections/section-050/module-01/course.md) | 4 | [lab-01](sections/section-050/module-01/labs/lab-01) |
 | 060-01 | [Control Token Lifetimes, Refresh Tokens And Sessions](sections/section-060/module-01/course.md) | 4 | [lab-01](sections/section-060/module-01/labs/lab-01) |
+| 070-01 | [End Sessions With Logout And Admin Control](sections/section-070/module-01/course.md) | 4 | [lab-01](sections/section-070/module-01/labs/lab-01) |
 | 080-01 | [Shape Tokens With Client Scopes And Protocol Mappers](sections/section-080/module-01/course.md) | 4 | [lab-01](sections/section-080/module-01/labs/lab-01) |
 
 ---
@@ -63,6 +65,7 @@ receives, and how the token travels through a gateway to a second API.
 | [040](sections/section-040/capstone/labs/lab-01) | Propagate A User To A Second API | subject token without the gateway audience, exchange off, an audience not available, a missing role |
 | [050](sections/section-050/capstone/labs/lab-01) | Secure The Service Clients Of A Realm | a signed-JWT-only client, a leaked secret, a public client that should be a service client, a missing role |
 | [060](sections/section-060/capstone/labs/lab-01) | Fix The Token Lifetimes Of A Client | a client override of one day, no refresh token rotation, the offline_access scope removed from the client, a one-minute offline idle time |
+| [070](sections/section-070/capstone/labs/lab-01) | Repair The Logout Of A Client | a wildcard post-logout redirect, no back-channel logout URL, a logout token without the session id, live sessions of a suspect account |
 | [080](sections/section-080/capstone/labs/lab-01) | Repair The Token Contents Of A Client | a groups mapper that skips the access token, Full Scope Allowed leaking an admin role, a needed client scope that is only optional |
 
 ---

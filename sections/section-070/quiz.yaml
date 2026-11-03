@@ -1,0 +1,245 @@
+# Knowledge check for section 070. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-070
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-070
+  title: "Logout, Back-Channel Logout And Session Control"
+placement:
+  position: after
+  reading: sections/section-070/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-070-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name what a session ending stops"
+    source_readings:
+      - sections/section-070/module-01/course-01-how-keycloak-sessions-end.md
+    prompt: "A user session ends. What does that stop?"
+    options:
+      - id: a
+        text: "Use of every access token that was already issued."
+        explanation: "Not correct. Access tokens run until their `exp`."
+      - id: b
+        text: "Refreshing with the refresh tokens of that session."
+        explanation: "Correct. The refresh token points to the removed session."
+      - id: c
+        text: "Validation of the signing keys."
+        explanation: "Not correct. Keys belong to the realm."
+      - id: d
+        text: "Sign-ins of the user in future."
+        explanation: "Not correct. The user can sign in again."
+    correct_option: b
+    explanation: "Correct. The refresh token points to the removed session."
+
+  - id: ats090-070-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict an access token after logout"
+    source_readings:
+      - sections/section-070/module-01/course-01-how-keycloak-sessions-end.md
+    prompt: "An API validates access tokens locally. A user logs out. What does the API do with the access token issued before the logout?"
+    options:
+      - id: a
+        text: "Refuses it at once."
+        explanation: "Not correct. The API does not ask Keycloak."
+      - id: b
+        text: "Accepts it until it expires."
+        explanation: "Correct. It checks signature, issuer, audience and expiry only."
+      - id: c
+        text: "Accepts it for one more minute."
+        explanation: "Not correct. There is no grace period."
+      - id: d
+        text: "Turns it into a refresh token."
+        explanation: "Not correct. An API does not issue tokens."
+    correct_option: b
+    explanation: "Correct. It checks signature, issuer, audience and expiry only."
+
+  - id: ats090-070-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the idle and max limits"
+    source_readings:
+      - sections/section-070/module-01/course-01-how-keycloak-sessions-end.md
+    prompt: "Which realm limit ends a session a fixed time after it started, whatever its activity?"
+    options:
+      - id: a
+        text: "SSO Session Idle."
+        explanation: "Not correct. It counts from the last activity."
+      - id: b
+        text: "SSO Session Max."
+        explanation: "Correct. It counts from the start of the session."
+      - id: c
+        text: "Access Token Lifespan."
+        explanation: "Not correct. It limits one access token."
+      - id: d
+        text: "Offline Session Idle."
+        explanation: "Not correct. It limits offline sessions."
+    correct_option: b
+    explanation: "Correct. It counts from the start of the session."
+
+  - id: ats090-070-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use the logout from a back end"
+    source_readings:
+      - sections/section-070/module-01/course-02-rp-initiated-logout-and-post-logout-redirects.md
+    prompt: "What does a public client send to the logout endpoint to end a session from its back end?"
+    options:
+      - id: a
+        text: "Its client ID and the refresh token."
+        explanation: "Correct. Keycloak answers 204."
+      - id: b
+        text: "The access token only."
+        explanation: "Not correct. The access token does not identify the session for logout."
+      - id: c
+        text: "The user's password."
+        explanation: "Not correct. The password is not needed."
+      - id: d
+        text: "The realm's signing key."
+        explanation: "Not correct. Clients never hold it."
+    correct_option: a
+    explanation: "Correct. Keycloak answers 204."
+
+  - id: ats090-070-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what id_token_hint does"
+    source_readings:
+      - sections/section-070/module-01/course-02-rp-initiated-logout-and-post-logout-redirects.md
+    prompt: "What does `id_token_hint` tell Keycloak in a browser logout?"
+    options:
+      - id: a
+        text: "Which redirect address to use."
+        explanation: "Not correct. That is `post_logout_redirect_uri`."
+      - id: b
+        text: "Which session and client the logout is for."
+        explanation: "Correct. The ID token identifies them."
+      - id: c
+        text: "How long the session may live."
+        explanation: "Not correct. Limits are realm settings."
+      - id: d
+        text: "Which user to create."
+        explanation: "Not correct. The endpoint does not create users."
+    correct_option: b
+    explanation: "Correct. The ID token identifies them."
+
+  - id: ats090-070-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a redirect to an unregistered address"
+    source_readings:
+      - sections/section-070/module-01/course-02-rp-initiated-logout-and-post-logout-redirects.md
+    prompt: "The request has `post_logout_redirect_uri=https://evil.example/`, which the client has not registered. What does Keycloak do?"
+    options:
+      - id: a
+        text: "Redirects to it anyway."
+        explanation: "Not correct. It checks the registered list."
+      - id: b
+        text: "Does not redirect to it and shows its own logout page."
+        explanation: "Correct. Only registered addresses are allowed."
+      - id: c
+        text: "Registers the address for the client."
+        explanation: "Not correct. Requests cannot change settings."
+      - id: d
+        text: "Deletes the client."
+        explanation: "Not correct. Nothing like that happens."
+    correct_option: b
+    explanation: "Correct. Only registered addresses are allowed."
+
+  - id: ats090-070-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe a back-channel logout"
+    source_readings:
+      - sections/section-070/module-01/course-03-back-channel-and-front-channel-logout.md
+    prompt: "How does Keycloak deliver a back-channel logout message?"
+    options:
+      - id: a
+        text: "It redirects the browser to each client."
+        explanation: "Not correct. That is front-channel logout."
+      - id: b
+        text: "It sends a server-to-server POST of a signed `logout_token` to the client's backchannel URL."
+        explanation: "Correct. No browser is involved."
+      - id: c
+        text: "It emails the user."
+        explanation: "Not correct. Keycloak does not use email for this."
+      - id: d
+        text: "It rotates the realm keys."
+        explanation: "Not correct. Key rotation is unrelated."
+    correct_option: b
+    explanation: "Correct. No browser is involved."
+
+  - id: ats090-070-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Say what session required adds"
+    source_readings:
+      - sections/section-070/module-01/course-03-back-channel-and-front-channel-logout.md
+    prompt: "What does `backchannel.logout.session.required` set to true add to the logout token?"
+    options:
+      - id: a
+        text: "The user's password hash."
+        explanation: "Not correct. Tokens never carry it."
+      - id: b
+        text: "The `sid` claim, so the application ends only that session."
+        explanation: "Correct. Without it, only `sub` is sent."
+      - id: c
+        text: "The client secret."
+        explanation: "Not correct. Secrets never go in tokens."
+      - id: d
+        text: "The refresh token."
+        explanation: "Not correct. The logout token is not a refresh token."
+    correct_option: b
+    explanation: "Correct. Without it, only `sub` is sent."
+
+  - id: ats090-070-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the command that ends all sessions of one user"
+    source_readings:
+      - sections/section-070/module-01/course-04-administering-sessions.md
+    prompt: "Which admin call ends all sessions of one user and no others?"
+    options:
+      - id: a
+        text: "`POST logout-all`."
+        explanation: "Not correct. That ends every session of the realm."
+      - id: b
+        text: "`POST users/<id>/logout`."
+        explanation: "Correct. It removes that user's sessions."
+      - id: c
+        text: "`DELETE realms/inventory`."
+        explanation: "Not correct. That deletes the realm."
+      - id: d
+        text: "`PUT clients/<id>`."
+        explanation: "Not correct. That changes a client."
+    correct_option: b
+    explanation: "Correct. It removes that user's sessions."
+
+  - id: ats090-070-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Choose the reaction to a leaked realm key"
+    source_readings:
+      - sections/section-070/module-01/course-04-administering-sessions.md
+    prompt: "A realm signing key has leaked. Which sequence fits?"
+    options:
+      - id: a
+        text: "Rotate the key, then call `logout-all`."
+        explanation: "Correct. Old tokens are untrusted and all sessions end."
+      - id: b
+        text: "Delete one session."
+        explanation: "Not correct. That does not cover all users."
+      - id: c
+        text: "Shorten the access token lifespan only."
+        explanation: "Not correct. That leaves existing sessions."
+      - id: d
+        text: "Disable the client."
+        explanation: "Not correct. That blocks the client but leaves sessions."
+    correct_option: a
+    explanation: "Correct. Old tokens are untrusted and all sessions end."
