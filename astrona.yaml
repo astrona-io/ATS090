@@ -102,8 +102,31 @@ modules:
           - name: "Securing applications: OpenID Connect"
             url: https://www.keycloak.org/securing-apps/oidc-layers
       - type: reading
+        title: "Client Settings And Capabilities"
+        path: sections/section-010/module-01/course-04-client-settings-and-capabilities.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Trim A Browser Client To The One Flow It Uses Lab"
+        path: sections/section-010/module-01/labs/lab-02
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: clients
+        task_kind: troubleshooting
+        tags: [capabilities, implicit-flow, direct-access-grants, full-scope, kcadm]
+        learning_goals:
+          - Read the capability switches of a client and find the flows it does not use
+          - Turn off the implicit flow and direct access grants for a browser client
+          - Limit the roles a client's tokens carry and prove each closed door with a request that fails
+        resources:
+          - name: "Server Administration Guide: OpenID Connect clients"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients
+          - name: "Server Administration Guide: client scope and full scope allowed"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_role_scope_mappings
+      - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
 
       - type: reading
         title: Question
@@ -178,8 +201,31 @@ modules:
         title: "State, Nonce And The ID Token"
         path: sections/section-020/module-01/course-03-state-nonce-and-the-id-token.md
       - type: reading
+        title: "UserInfo, Scopes And The openid Scope"
+        path: sections/section-020/module-01/course-04-userinfo-and-scopes.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Give An Application The Claims It Asks For Lab"
+        path: sections/section-020/module-01/labs/lab-02
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: browser-sign-in
+        task_kind: troubleshooting
+        tags: [userinfo, client-scopes, openid-scope, default-scopes, kcadm]
+        learning_goals:
+          - Call the UserInfo endpoint with an access token and read the claims
+          - Find a missing claim in the client's default scopes instead of in the user
+          - Restore a default client scope without adding a protocol mapper
+        resources:
+          - name: "Server Administration Guide: client scopes"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_scopes
+          - name: "OpenID Connect Core 1.0: UserInfo endpoint"
+            url: https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
+      - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-04-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
 
       - type: reading
         title: Question
@@ -337,8 +383,31 @@ modules:
         title: "Downscoping And A Second API"
         path: sections/section-040/module-01/course-03-downscoping-and-a-second-api.md
       - type: reading
+        title: "Troubleshooting A Token Exchange"
+        path: sections/section-040/module-01/course-04-troubleshooting-token-exchange.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Repair A Failing Token Exchange Lab"
+        path: sections/section-040/module-01/labs/lab-02
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: token-propagation
+        task_kind: troubleshooting
+        tags: [token-exchange, audience, troubleshooting, protocol-mappers, kcadm]
+        learning_goals:
+          - Tell the four failures of a token exchange apart from the error and the token
+          - Fix a refused exchange on the client that causes it, without widening the first client's audience
+          - Remove an audience the gateway does not use and prove it with an exchange without audience
+        resources:
+          - name: "Securing applications: standard token exchange"
+            url: https://www.keycloak.org/securing-apps/token-exchange
+          - name: "RFC 8693: OAuth 2.0 Token Exchange"
+            url: https://datatracker.ietf.org/doc/html/rfc8693
+      - type: reading
         title: Summary
-        path: sections/section-040/module-01/course-04-summary.md
+        path: sections/section-040/module-01/course-05-summary.md
 
       - type: reading
         title: Question
@@ -667,6 +736,436 @@ modules:
       - type: quiz
         title: "Knowledge Check: Client Scopes, Protocol Mappers And Token Claims"
         path: sections/section-080/quiz.yaml
+        pass_score: 70
+  - id: module-090
+    title: "Keycloak As A SAML Identity Provider"
+    description: >
+      Keycloak as a SAML 2.0 identity provider: the browser SSO flow and the descriptor, SAML clients and
+      name IDs, signatures and encryption, and attribute mappers, roles and single logout.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-090/README.md
+
+      - type: reading
+        title: "Keycloak As A SAML Identity Provider"
+        path: sections/section-090/module-01/course.md
+      - type: reading
+        title: "SAML Basics And The Keycloak Descriptor"
+        path: sections/section-090/module-01/course-01-saml-basics-and-the-keycloak-descriptor.md
+      - type: reading
+        title: "SAML Clients And Name IDs"
+        path: sections/section-090/module-01/course-02-saml-clients-and-name-ids.md
+      - type: reading
+        title: Question
+        path: sections/section-090/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Fix A SAML Client Lab"
+        path: sections/section-090/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: saml-clients
+        task_kind: troubleshooting
+        tags: [saml, saml-client, name-id, assertion-signature, kcadm]
+        learning_goals:
+          - Turn on the assertion signature of a SAML client
+          - Choose the name ID format
+          - Keep the ACS address exact
+        resources:
+          - name: "Server Administration Guide: SAML clients"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client-saml-configuration
+          - name: "Server Administration Guide: SAML"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#saml
+      - type: reading
+        title: "Signatures And Encryption"
+        path: sections/section-090/module-01/course-03-signatures-and-encryption.md
+      - type: reading
+        title: "Attributes, Roles And Single Logout"
+        path: sections/section-090/module-01/course-04-attributes-roles-and-single-logout.md
+      - type: reading
+        title: Summary
+        path: sections/section-090/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-090/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Secure A SAML Service Provider Capstone"
+        path: sections/section-090/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: saml-clients
+        task_kind: troubleshooting
+        tags: [saml, saml-client, protocol-mapper, assertion-signature, kcadm]
+        learning_goals:
+          - Replace a wildcard ACS address with the exact address
+          - Sign the assertion
+          - Add an attribute mapper and fix a role attribute name
+        resources:
+          - name: "Server Administration Guide: SAML clients"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client-saml-configuration
+          - name: "Server Administration Guide: protocol mappers"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_protocol-mappers
+      - type: quiz
+        title: "Knowledge Check: Keycloak As A SAML Identity Provider"
+        path: sections/section-090/quiz.yaml
+        pass_score: 70
+  - id: module-100
+    title: "Authorization Services"
+    description: >
+      Keycloak Authorization Services: resource servers, resources and scopes, policies and permissions,
+      requesting and evaluating permissions, decision strategies and enforcement modes.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-100/README.md
+
+      - type: reading
+        title: "Authorization Services"
+        path: sections/section-100/module-01/course.md
+      - type: reading
+        title: "Resource Servers, Resources And Scopes"
+        path: sections/section-100/module-01/course-01-resource-servers-resources-and-scopes.md
+      - type: reading
+        title: "Policies And Permissions"
+        path: sections/section-100/module-01/course-02-policies-and-permissions.md
+      - type: reading
+        title: "Requesting And Evaluating Permissions"
+        path: sections/section-100/module-01/course-03-requesting-and-evaluating-permissions.md
+      - type: reading
+        title: Question
+        path: sections/section-100/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Grant Access With A Role Policy Lab"
+        path: sections/section-100/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: authorization-services
+        task_kind: troubleshooting
+        tags: [authorization-services, policy, permission, uma, kcadm]
+        learning_goals:
+          - Read why a permission denies a user
+          - Fix a role policy
+          - Verify decisions with the UMA ticket grant
+        resources:
+          - name: "Authorization Services Guide"
+            url: https://www.keycloak.org/docs/latest/authorization_services/index.html
+          - name: "Server Administration Guide"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html
+      - type: reading
+        title: "Decision Strategies And Enforcement"
+        path: sections/section-100/module-01/course-04-decision-strategies-and-enforcement.md
+      - type: reading
+        title: Summary
+        path: sections/section-100/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-100/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Correct The Permissions Of A Report API Capstone"
+        path: sections/section-100/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 35m
+        topic: authorization-services
+        task_kind: troubleshooting
+        tags: [authorization-services, policy, negative-logic, permission, kcadm]
+        learning_goals:
+          - Fix an inverted policy
+          - Bind a scope permission to the right policy
+          - Verify six decisions
+        resources:
+          - name: "Authorization Services Guide"
+            url: https://www.keycloak.org/docs/latest/authorization_services/index.html
+      - type: quiz
+        title: "Knowledge Check: Authorization Services"
+        path: sections/section-100/quiz.yaml
+        pass_score: 70
+  - id: module-110
+    title: "Client Registration And Client Policies"
+    description: >
+      Dynamic client registration and client policies: registration endpoints and initial access tokens,
+      registration policies, client profiles and policies, and managing registered clients.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-110/README.md
+
+      - type: reading
+        title: "Client Registration And Client Policies"
+        path: sections/section-110/module-01/course.md
+      - type: reading
+        title: "Registration Methods And Initial Access Tokens"
+        path: sections/section-110/module-01/course-01-registration-methods-and-initial-access-tokens.md
+      - type: reading
+        title: "Client Registration Policies"
+        path: sections/section-110/module-01/course-02-client-registration-policies.md
+      - type: reading
+        title: "Client Profiles And Policies"
+        path: sections/section-110/module-01/course-03-client-profiles-and-policies.md
+      - type: reading
+        title: Question
+        path: sections/section-110/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Enforce PKCE With A Client Policy Lab"
+        path: sections/section-110/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: client-policies
+        task_kind: troubleshooting
+        tags: [client-policies, pkce, client-registration, kcadm]
+        learning_goals:
+          - Read a client profile and policy
+          - Find why a policy has no effect
+          - Verify the result with a test client
+        resources:
+          - name: "Server Administration Guide: client policies"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_policies
+          - name: "Securing Applications Guide"
+            url: https://www.keycloak.org/docs/latest/securing_apps/index.html
+      - type: reading
+        title: "Managing Registered Clients"
+        path: sections/section-110/module-01/course-04-managing-registered-clients.md
+      - type: reading
+        title: Summary
+        path: sections/section-110/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-110/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Lock Down Partner Client Registration Capstone"
+        path: sections/section-110/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: client-policies
+        task_kind: troubleshooting
+        tags: [client-policies, client-registration, pkce, ropc, kcadm]
+        learning_goals:
+          - Attach a profile to a policy
+          - Add an executor that rejects the password grant
+          - Test admin API and dynamic registration
+        resources:
+          - name: "Server Administration Guide: client policies"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_client_policies
+      - type: quiz
+        title: "Knowledge Check: Client Registration And Client Policies"
+        path: sections/section-110/quiz.yaml
+        pass_score: 70
+  - id: module-120
+    title: "OAuth 2.0 Device Authorization Grant"
+    description: >
+      The OAuth 2.0 device authorization grant: the flow, enabling the grant on a client,
+      polling errors and timing, and the security of the device flow.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-120/README.md
+
+      - type: reading
+        title: "OAuth 2.0 Device Authorization Grant"
+        path: sections/section-120/module-01/course.md
+      - type: reading
+        title: "How The Device Flow Works"
+        path: sections/section-120/module-01/course-01-how-the-device-flow-works.md
+      - type: reading
+        title: "Enabling The Grant On A Client"
+        path: sections/section-120/module-01/course-02-enabling-the-grant-on-a-client.md
+      - type: reading
+        title: Question
+        path: sections/section-120/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Enable The Device Grant Lab"
+        path: sections/section-120/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: device-grant
+        task_kind: troubleshooting
+        tags: [device-grant, oauth2, public-client, kcadm]
+        learning_goals:
+          - Read the error of a refused device request
+          - Enable the device grant on a client
+          - Poll the token endpoint
+        resources:
+          - name: "Server Administration Guide: OAuth 2.0 device authorization grant"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oauth_2_0_device_authorization_grant
+      - type: reading
+        title: "Polling, Errors And Timing"
+        path: sections/section-120/module-01/course-03-polling-errors-and-timing.md
+      - type: reading
+        title: "Security Of The Device Flow"
+        path: sections/section-120/module-01/course-04-security-of-the-device-flow.md
+      - type: reading
+        title: Summary
+        path: sections/section-120/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-120/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Secure A Device Login For A TV App Capstone"
+        path: sections/section-120/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: device-grant
+        task_kind: troubleshooting
+        tags: [device-grant, oauth2, public-client, polling-interval, kcadm]
+        learning_goals:
+          - Make a device client public
+          - Limit the code lifetime and the polling interval
+          - Turn off direct access grants
+        resources:
+          - name: "Server Administration Guide: OAuth 2.0 device authorization grant"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_oauth_2_0_device_authorization_grant
+      - type: quiz
+        title: "Knowledge Check: OAuth 2.0 Device Authorization Grant"
+        path: sections/section-120/quiz.yaml
+        pass_score: 70
+  - id: module-130
+    title: "Sender-Constrained Tokens: DPoP And Mutual TLS"
+    description: >
+      Sender-constrained tokens: the weakness of bearer tokens, DPoP in Keycloak, mutual TLS and
+      certificate-bound tokens, and how to choose and roll out.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-130/README.md
+
+      - type: reading
+        title: "Sender-Constrained Tokens: DPoP And Mutual TLS"
+        path: sections/section-130/module-01/course.md
+      - type: reading
+        title: "Bearer Tokens And Their Weakness"
+        path: sections/section-130/module-01/course-01-bearer-tokens-and-their-weakness.md
+      - type: reading
+        title: "DPoP In Keycloak"
+        path: sections/section-130/module-01/course-02-dpop-in-keycloak.md
+      - type: reading
+        title: Question
+        path: sections/section-130/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Require DPoP Binding Lab"
+        path: sections/section-130/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: dpop
+        task_kind: troubleshooting
+        tags: [dpop, sender-constrained-tokens, client-credentials, kcadm]
+        learning_goals:
+          - Require DPoP-bound tokens on one client
+          - Keep a legacy client working
+          - Check the refusal without a proof
+        resources:
+          - name: "Server Administration Guide: DPoP"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_dpop
+      - type: reading
+        title: "Mutual TLS And Certificate-Bound Tokens"
+        path: sections/section-130/module-01/course-03-mutual-tls-and-certificate-bound-tokens.md
+      - type: reading
+        title: "Choosing And Rolling Out"
+        path: sections/section-130/module-01/course-04-choosing-and-rolling-out.md
+      - type: reading
+        title: Summary
+        path: sections/section-130/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-130/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Bind Tokens For A Payments Platform Capstone"
+        path: sections/section-130/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: dpop
+        task_kind: troubleshooting
+        tags: [dpop, sender-constrained-tokens, token-lifetime, kcadm]
+        learning_goals:
+          - Require DPoP on the right client
+          - Remove DPoP from a client that cannot send proofs
+          - Shorten the access token lifetime
+        resources:
+          - name: "Server Administration Guide: DPoP"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_dpop
+      - type: quiz
+        title: "Knowledge Check: Sender-Constrained Tokens: DPoP And Mutual TLS"
+        path: sections/section-130/quiz.yaml
+        pass_score: 70
+  - id: module-140
+    title: "Securing Applications With Libraries, Proxies And Gateways"
+    description: >
+      Securing applications with standard OpenID Connect libraries, reverse proxies and gateways:
+      choosing an option, client configuration for a proxy, token validation, and headers, issuer and logout.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-140/README.md
+
+      - type: reading
+        title: "Securing Applications With Libraries, Proxies And Gateways"
+        path: sections/section-140/module-01/course.md
+      - type: reading
+        title: "Choosing How To Secure An Application"
+        path: sections/section-140/module-01/course-01-choosing-how-to-secure-an-application.md
+      - type: reading
+        title: "Client Configuration For A Proxy"
+        path: sections/section-140/module-01/course-02-client-configuration-for-a-proxy.md
+      - type: reading
+        title: "Validating Tokens In A Resource Server"
+        path: sections/section-140/module-01/course-03-validating-tokens-in-a-resource-server.md
+      - type: reading
+        title: Question
+        path: sections/section-140/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Make Tokens Acceptable To A Proxy Lab"
+        path: sections/section-140/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: securing-applications
+        task_kind: troubleshooting
+        tags: [reverse-proxy, audience, groups-claim, protocol-mapper, kcadm]
+        learning_goals:
+          - Read the claims of an access token
+          - Add an audience mapper and a groups mapper
+          - Keep the redirect address exact
+        resources:
+          - name: "Securing Applications Guide"
+            url: https://www.keycloak.org/docs/latest/securing_apps/index.html
+          - name: "Server Administration Guide: protocol mappers"
+            url: https://www.keycloak.org/docs/latest/server_admin/index.html#_protocol-mappers
+      - type: reading
+        title: "Gateways, Headers And Logout"
+        path: sections/section-140/module-01/course-04-gateways-headers-and-logout.md
+      - type: reading
+        title: Summary
+        path: sections/section-140/module-01/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-140/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Protect An Orders API Behind A Gateway Capstone"
+        path: sections/section-140/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: securing-applications
+        task_kind: troubleshooting
+        tags: [gateway, audience, groups-claim, token-lifetime, kcadm]
+        learning_goals:
+          - Fix the audience and the groups claim name
+          - Shorten the access token lifetime
+          - Replace a wildcard redirect address
+        resources:
+          - name: "Securing Applications Guide"
+            url: https://www.keycloak.org/docs/latest/securing_apps/index.html
+      - type: quiz
+        title: "Knowledge Check: Securing Applications With Libraries, Proxies And Gateways"
+        path: sections/section-140/quiz.yaml
         pass_score: 70
       - type: quiz
         title: "Final Domain Quiz"

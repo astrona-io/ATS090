@@ -1,0 +1,246 @@
+# Knowledge check for section 120. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-120
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-120
+  title: "OAuth 2.0 Device Authorization Grant"
+placement:
+  position: after
+  reading: sections/section-120/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-120-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say who types the user code"
+    source_readings:
+      - sections/section-120/module-01/course-01-how-the-device-flow-works.md
+    prompt: "In the device flow, where does the user enter the user code?"
+    options:
+      - id: a
+        text: "On the device that shows the code."
+        explanation: "Not correct. The device has a poor input method."
+      - id: b
+        text: "On a second device with a browser, at the verification address."
+        explanation: "Correct. The user signs in there."
+      - id: c
+        text: "In the admin console."
+        explanation: "Not correct. Administrators do not approve for users."
+      - id: d
+        text: "In the token request."
+        explanation: "Not correct. The device does not know the user code approval."
+    correct_option: b
+    explanation: "Correct. The user signs in there."
+
+  - id: ats090-120-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the secret code"
+    source_readings:
+      - sections/section-120/module-01/course-01-how-the-device-flow-works.md
+    prompt: "Which code must only the device keep?"
+    options:
+      - id: a
+        text: "The user code."
+        explanation: "Not correct. It is shown to the user."
+      - id: b
+        text: "The device code."
+        explanation: "Correct. It is long, secret and used for polling."
+      - id: c
+        text: "The verification address."
+        explanation: "Not correct. It is shown to the user."
+      - id: d
+        text: "The client ID."
+        explanation: "Not correct. It is not secret."
+    correct_option: b
+    explanation: "Correct. It is long, secret and used for polling."
+
+  - id: ats090-120-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the grant type for polling"
+    source_readings:
+      - sections/section-120/module-01/course-01-how-the-device-flow-works.md
+      - sections/section-120/module-01/course-03-polling-errors-and-timing.md
+    prompt: "Which `grant_type` does the device send when polling?"
+    options:
+      - id: a
+        text: "`password`."
+        explanation: "Not correct. That is a different grant."
+      - id: b
+        text: "`urn:ietf:params:oauth:grant-type:device_code`."
+        explanation: "Correct. It carries the device code."
+      - id: c
+        text: "`client_credentials`."
+        explanation: "Not correct. That signs in a client."
+      - id: d
+        text: "`refresh_token`."
+        explanation: "Not correct. That renews tokens."
+    correct_option: b
+    explanation: "Correct. It carries the device code."
+
+  - id: ats090-120-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a disabled client"
+    source_readings:
+      - sections/section-120/module-01/course-02-enabling-the-grant-on-a-client.md
+    prompt: "The device grant is off on a client. What does the device endpoint answer?"
+    options:
+      - id: a
+        text: "A device code with a short lifetime."
+        explanation: "Not correct. The grant is off."
+      - id: b
+        text: "`unauthorized_client` with HTTP 400."
+        explanation: "Correct. The client may not use the flow."
+      - id: c
+        text: "A redirect to the login page."
+        explanation: "Not correct. The endpoint does not redirect."
+      - id: d
+        text: "An access token."
+        explanation: "Not correct. Tokens come only after approval."
+    correct_option: b
+    explanation: "Correct. The client may not use the flow."
+
+  - id: ats090-120-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the attribute"
+    source_readings:
+      - sections/section-120/module-01/course-02-enabling-the-grant-on-a-client.md
+    prompt: "Which client attribute turns the device grant on?"
+    options:
+      - id: a
+        text: "`oauth2.device.authorization.grant.enabled`."
+        explanation: "Correct. It is set per client."
+      - id: b
+        text: "`directAccessGrantsEnabled`."
+        explanation: "Not correct. That is the password grant."
+      - id: c
+        text: "`standardFlowEnabled`."
+        explanation: "Not correct. That is the code flow."
+      - id: d
+        text: "`implicitFlowEnabled`."
+        explanation: "Not correct. That is the implicit flow."
+    correct_option: a
+    explanation: "Correct. It is set per client."
+
+  - id: ats090-120-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the client type"
+    source_readings:
+      - sections/section-120/module-01/course-02-enabling-the-grant-on-a-client.md
+    prompt: "Which client type fits a TV application you ship to many homes?"
+    options:
+      - id: a
+        text: "A confidential client with a shared secret."
+        explanation: "Not correct. The secret would be on every TV."
+      - id: b
+        text: "A public client."
+        explanation: "Correct. It holds no secret."
+      - id: c
+        text: "A bearer-only client."
+        explanation: "Not correct. Not used for sign-in."
+      - id: d
+        text: "A SAML client."
+        explanation: "Not correct. The device grant is OAuth."
+    correct_option: b
+    explanation: "Correct. It holds no secret."
+
+  - id: ats090-120-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "React to authorization_pending"
+    source_readings:
+      - sections/section-120/module-01/course-03-polling-errors-and-timing.md
+    prompt: "The token endpoint answers `authorization_pending`. What does the device do?"
+    options:
+      - id: a
+        text: "Stops with an error."
+        explanation: "Not correct. It is not an error."
+      - id: b
+        text: "Waits the interval and polls again."
+        explanation: "Correct. The user has not approved yet."
+      - id: c
+        text: "Starts a new device request."
+        explanation: "Not correct. The code is still valid."
+      - id: d
+        text: "Sends the user code."
+        explanation: "Not correct. The user code is for the user."
+    correct_option: b
+    explanation: "Correct. The user has not approved yet."
+
+  - id: ats090-120-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "React to slow_down"
+    source_readings:
+      - sections/section-120/module-01/course-03-polling-errors-and-timing.md
+    prompt: "The token endpoint answers `slow_down`. What must the device do?"
+    options:
+      - id: a
+        text: "Poll faster."
+        explanation: "Not correct. That makes it worse."
+      - id: b
+        text: "Increase its polling interval and continue."
+        explanation: "Correct. It polled too fast."
+      - id: c
+        text: "Delete the client."
+        explanation: "Not correct. Not a device action."
+      - id: d
+        text: "Use the user code."
+        explanation: "Not correct. Not related."
+    correct_option: b
+    explanation: "Correct. It polled too fast."
+
+  - id: ats090-120-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Describe device code phishing"
+    source_readings:
+      - sections/section-120/module-01/course-04-security-of-the-device-flow.md
+    prompt: "What is device code phishing?"
+    options:
+      - id: a
+        text: "An attacker starts a request and tricks a victim into approving its user code."
+        explanation: "Correct. The attacker's device then holds the victim's tokens."
+      - id: b
+        text: "An attacker guesses the realm name."
+        explanation: "Not correct. Not related to codes."
+      - id: c
+        text: "An attacker steals a refresh token from a log."
+        explanation: "Not correct. That is token theft."
+      - id: d
+        text: "An attacker sends a SAML assertion."
+        explanation: "Not correct. Not related."
+    correct_option: a
+    explanation: "Correct. The attacker's device then holds the victim's tokens."
+
+  - id: ats090-120-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Pick a safe lifetime"
+    source_readings:
+      - sections/section-120/module-01/course-04-security-of-the-device-flow.md
+    prompt: "Which setting limits the time an attacker has to talk a victim into approving?"
+    options:
+      - id: a
+        text: "A short device code lifetime."
+        explanation: "Correct. The codes stop working sooner."
+      - id: b
+        text: "A long polling interval only."
+        explanation: "Not correct. It does not limit the code lifetime."
+      - id: c
+        text: "Enabling direct access grants."
+        explanation: "Not correct. It adds a path."
+      - id: d
+        text: "A larger set of scopes."
+        explanation: "Not correct. It increases the harm."
+    correct_option: a
+    explanation: "Correct. The codes stop working sooner."

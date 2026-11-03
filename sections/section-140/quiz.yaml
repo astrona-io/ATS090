@@ -1,0 +1,246 @@
+# Knowledge check for section 140. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-140
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-140
+  title: "Securing Applications With Libraries, Proxies And Gateways"
+placement:
+  position: after
+  reading: sections/section-140/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-140-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the option for an application you cannot change"
+    source_readings:
+      - sections/section-140/module-01/course-01-choosing-how-to-secure-an-application.md
+    prompt: "You must add sign-in to an application whose code you cannot change. Which option fits?"
+    options:
+      - id: a
+        text: "A library inside the application."
+        explanation: "Not correct. That needs code changes."
+      - id: b
+        text: "A reverse proxy in front of it."
+        explanation: "Correct. The proxy does the sign-in."
+      - id: c
+        text: "A SAML client only."
+        explanation: "Not correct. The question is about where the work runs."
+      - id: d
+        text: "A device flow."
+        explanation: "Not correct. That is for devices."
+    correct_option: b
+    explanation: "Correct. The proxy does the sign-in."
+
+  - id: ats090-140-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the client type for a single-page app"
+    source_readings:
+      - sections/section-140/module-01/course-01-choosing-how-to-secure-an-application.md
+    prompt: "Which client type fits a single-page application?"
+    options:
+      - id: a
+        text: "Confidential with a secret in the code."
+        explanation: "Not correct. A secret in the browser is public."
+      - id: b
+        text: "Public with PKCE."
+        explanation: "Correct. No secret is needed."
+      - id: c
+        text: "Bearer-only."
+        explanation: "Not correct. Not used for sign-in."
+      - id: d
+        text: "Service account only."
+        explanation: "Not correct. That has no user sign-in."
+    correct_option: b
+    explanation: "Correct. No secret is needed."
+
+  - id: ats090-140-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say why the redirect address is exact"
+    source_readings:
+      - sections/section-140/module-01/course-02-client-configuration-for-a-proxy.md
+    prompt: "Why must the redirect address of a proxy client be exact and not a wildcard?"
+    options:
+      - id: a
+        text: "A wildcard lets an attacker receive the code through an open redirect on that host."
+        explanation: "Correct. The code can leave the intended callback."
+      - id: b
+        text: "A wildcard makes tokens larger."
+        explanation: "Not correct. Size is unrelated."
+      - id: c
+        text: "A wildcard disables the secret."
+        explanation: "Not correct. The secret still applies."
+      - id: d
+        text: "A wildcard turns on the device flow."
+        explanation: "Not correct. Not related."
+    correct_option: a
+    explanation: "Correct. The code can leave the intended callback."
+
+  - id: ats090-140-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the mapper that adds an audience"
+    source_readings:
+      - sections/section-140/module-01/course-02-client-configuration-for-a-proxy.md
+    prompt: "Which mapper type adds the client ID of a proxy to the `aud` claim of the access token?"
+    options:
+      - id: a
+        text: "`oidc-audience-mapper`."
+        explanation: "Correct. It adds an audience to the token."
+      - id: b
+        text: "`oidc-group-membership-mapper`."
+        explanation: "Not correct. It writes groups."
+      - id: c
+        text: "`oidc-hardcoded-claim-mapper`."
+        explanation: "Not correct. It writes a fixed claim."
+      - id: d
+        text: "`saml-role-list-mapper`."
+        explanation: "Not correct. That is for SAML."
+    correct_option: a
+    explanation: "Correct. It adds an audience to the token."
+
+  - id: ats090-140-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain full.path"
+    source_readings:
+      - sections/section-140/module-01/course-02-client-configuration-for-a-proxy.md
+    prompt: "A group membership mapper has `full.path` off. What does a member of the group `staff` get?"
+    options:
+      - id: a
+        text: "The value `/staff`."
+        explanation: "Not correct. That is with the path on."
+      - id: b
+        text: "The value `staff`."
+        explanation: "Correct. Only the group name."
+      - id: c
+        text: "No claim."
+        explanation: "Not correct. The claim is written."
+      - id: d
+        text: "The group ID."
+        explanation: "Not correct. It writes the name."
+    correct_option: b
+    explanation: "Correct. Only the group name."
+
+  - id: ats090-140-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "List the resource server checks"
+    source_readings:
+      - sections/section-140/module-01/course-03-validating-tokens-in-a-resource-server.md
+    prompt: "Which set of checks must a resource server make on a JWT access token?"
+    options:
+      - id: a
+        text: "Signature only."
+        explanation: "Not correct. Tokens of other issuers would pass."
+      - id: b
+        text: "Signature, issuer, audience, time window and permission."
+        explanation: "Correct. Each check prevents a different attack."
+      - id: c
+        text: "Only the expiry."
+        explanation: "Not correct. A forged token would pass."
+      - id: d
+        text: "Only the audience."
+        explanation: "Not correct. A forged token would pass."
+    correct_option: b
+    explanation: "Correct. Each check prevents a different attack."
+
+  - id: ats090-140-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle key rotation"
+    source_readings:
+      - sections/section-140/module-01/course-03-validating-tokens-in-a-resource-server.md
+    prompt: "A token arrives with a `kid` that the API has not cached. What should the API do?"
+    options:
+      - id: a
+        text: "Reject all tokens forever."
+        explanation: "Not correct. Keys rotate by design."
+      - id: b
+        text: "Fetch the JWKS again and look for the `kid`."
+        explanation: "Correct. The realm may have rotated its keys."
+      - id: c
+        text: "Accept the token without checking."
+        explanation: "Not correct. That skips the signature."
+      - id: d
+        text: "Fetch the JWKS on every request."
+        explanation: "Not correct. Cache it instead."
+    correct_option: b
+    explanation: "Correct. The realm may have rotated its keys."
+
+  - id: ats090-140-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Compare local validation and introspection"
+    source_readings:
+      - sections/section-140/module-01/course-03-validating-tokens-in-a-resource-server.md
+    prompt: "What is the trade-off of local JWT validation compared with introspection?"
+    options:
+      - id: a
+        text: "It is slower."
+        explanation: "Not correct. Local checks avoid a network call."
+      - id: b
+        text: "A revoked token is accepted until it expires."
+        explanation: "Correct. Only introspection sees revocation at once."
+      - id: c
+        text: "It needs a client secret."
+        explanation: "Not correct. It does not."
+      - id: d
+        text: "It cannot check the issuer."
+        explanation: "Not correct. It can."
+    correct_option: b
+    explanation: "Correct. Only introspection sees revocation at once."
+
+  - id: ats090-140-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain an issuer mismatch"
+    source_readings:
+      - sections/section-140/module-01/course-03-validating-tokens-in-a-resource-server.md
+      - sections/section-140/module-01/course-04-gateways-headers-and-logout.md
+    prompt: "Tokens say `iss` is `http://keycloak:8080/realms/inventory`, but an API expects `https://auth.example.com/realms/inventory`. What happens?"
+    options:
+      - id: a
+        text: "The API accepts the tokens."
+        explanation: "Not correct. The issuer check fails."
+      - id: b
+        text: "The API rejects every token."
+        explanation: "Correct. The issuer differs."
+      - id: c
+        text: "Keycloak rotates the keys."
+        explanation: "Not correct. Not related."
+      - id: d
+        text: "The API switches to introspection."
+        explanation: "Not correct. It does not switch on its own."
+    correct_option: b
+    explanation: "Correct. The issuer differs."
+
+  - id: ats090-140-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Name the header risk"
+    source_readings:
+      - sections/section-140/module-01/course-04-gateways-headers-and-logout.md
+    prompt: "A proxy sets the header `X-Forwarded-User`. What must it also do?"
+    options:
+      - id: a
+        text: "Nothing."
+        explanation: "Not correct. Callers could send the header themselves."
+      - id: b
+        text: "Remove any such header that arrives from outside before setting its own."
+        explanation: "Correct. Otherwise callers can pretend to be any user."
+      - id: c
+        text: "Encrypt the header."
+        explanation: "Not correct. Not the issue."
+      - id: d
+        text: "Send it to Keycloak."
+        explanation: "Not correct. Not the issue."
+    correct_option: b
+    explanation: "Correct. Otherwise callers can pretend to be any user."

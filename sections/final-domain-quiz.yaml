@@ -558,3 +558,412 @@ questions:
         explanation: "Not correct. That changes a client."
     correct_option: b
     explanation: "Correct. It removes that user's sessions."
+  - id: ats090-final-q090a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find the IdP metadata"
+    source_readings:
+      - sections/section-090/module-01/course-01-saml-basics-and-the-keycloak-descriptor.md
+    prompt: "Where does Keycloak publish the SAML metadata of a realm?"
+    options:
+      - id: a
+        text: "`/realms/<realm>/.well-known/openid-configuration`."
+        explanation: "Not correct. That is the OpenID Connect document."
+      - id: b
+        text: "`/realms/<realm>/protocol/saml/descriptor`."
+        explanation: "Correct. It lists entity ID, sign-on addresses and certificate."
+      - id: c
+        text: "`/realms/<realm>/protocol/openid-connect/certs`."
+        explanation: "Not correct. That lists JWKS keys."
+      - id: d
+        text: "`/admin/realms/<realm>/clients`."
+        explanation: "Not correct. That is the admin API."
+    correct_option: b
+    explanation: "Correct. It lists entity ID, sign-on addresses and certificate."
+
+  - id: ats090-final-q090b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the name ID format"
+    source_readings:
+      - sections/section-090/module-01/course-02-saml-clients-and-name-ids.md
+    prompt: "A service provider matches users by email address. Which name ID format fits?"
+    options:
+      - id: a
+        text: "`transient`."
+        explanation: "Not correct. It changes on every sign-in."
+      - id: b
+        text: "`email`."
+        explanation: "Correct. The name ID is the user's email address."
+      - id: c
+        text: "`persistent`."
+        explanation: "Not correct. It is opaque, not an email address."
+      - id: d
+        text: "None, SAML sends no name ID."
+        explanation: "Not correct. The assertion has a subject name ID."
+    correct_option: b
+    explanation: "Correct. The name ID is the user's email address."
+
+  - id: ats090-final-q090c
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a misnamed role attribute"
+    source_readings:
+      - sections/section-090/module-01/course-04-attributes-roles-and-single-logout.md
+    prompt: "The SP reads roles from the attribute `Role`, but the role list mapper writes `role-list`. What does the SP see?"
+    options:
+      - id: a
+        text: "The roles, under another name."
+        explanation: "Not correct. The SP looks only for its own name."
+      - id: b
+        text: "No roles, because it finds no attribute named `Role`."
+        explanation: "Correct. The attribute name must match."
+      - id: c
+        text: "An error from Keycloak."
+        explanation: "Not correct. Keycloak sends the assertion."
+      - id: d
+        text: "The roles of every user."
+        explanation: "Not correct. Each assertion holds one user's roles."
+    correct_option: b
+    explanation: "Correct. The attribute name must match."
+  - id: ats090-final-q100a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell a resource from a scope"
+    source_readings:
+      - sections/section-100/module-01/course-01-resource-servers-resources-and-scopes.md
+    prompt: "Which statement is correct?"
+    options:
+      - id: a
+        text: "A scope is the thing protected, a resource is the action."
+        explanation: "Not correct. This is reversed."
+      - id: b
+        text: "A resource is the thing protected, a scope is an action on it."
+        explanation: "Correct. For example the resource invoice and the scope view."
+      - id: c
+        text: "Resources and scopes are the same object."
+        explanation: "Not correct. They are separate objects."
+      - id: d
+        text: "Scopes are only for SAML."
+        explanation: "Not correct. Scopes exist in Authorization Services for any resource."
+    correct_option: b
+    explanation: "Correct. For example the resource invoice and the scope view."
+
+  - id: ats090-final-q100b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a negative policy"
+    source_readings:
+      - sections/section-100/module-01/course-02-policies-and-permissions.md
+    prompt: "A role policy for `finance` has the logic NEGATIVE. Who passes it?"
+    options:
+      - id: a
+        text: "Users with the role finance."
+        explanation: "Not correct. That is POSITIVE logic."
+      - id: b
+        text: "Users without the role finance."
+        explanation: "Correct. NEGATIVE inverts the result."
+      - id: c
+        text: "Nobody."
+        explanation: "Not correct. It passes users without the role."
+      - id: d
+        text: "Everybody."
+        explanation: "Not correct. It does not pass users with the role."
+    correct_option: b
+    explanation: "Correct. NEGATIVE inverts the result."
+
+  - id: ats090-final-q100c
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain the decision strategy"
+    source_readings:
+      - sections/section-100/module-01/course-04-decision-strategies-and-enforcement.md
+    prompt: "A permission has two policies and the decision strategy UNANIMOUS. When is it granted?"
+    options:
+      - id: a
+        text: "When at least one policy passes."
+        explanation: "Not correct. That is AFFIRMATIVE."
+      - id: b
+        text: "When all policies pass."
+        explanation: "Correct. UNANIMOUS needs every policy."
+      - id: c
+        text: "When most policies pass."
+        explanation: "Not correct. That is CONSENSUS."
+      - id: d
+        text: "Never."
+        explanation: "Not correct. It can be granted."
+    correct_option: b
+    explanation: "Correct. UNANIMOUS needs every policy."
+  - id: ats090-final-q110a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say what an initial access token limits"
+    source_readings:
+      - sections/section-110/module-01/course-01-registration-methods-and-initial-access-tokens.md
+    prompt: "What does an initial access token limit?"
+    options:
+      - id: a
+        text: "The number of registrations and the time it can be used."
+        explanation: "Correct. It has a count and an expiration."
+      - id: b
+        text: "The scopes of the client."
+        explanation: "Not correct. Scopes are set by policies."
+      - id: c
+        text: "The password of the admin."
+        explanation: "Not correct. It does not touch passwords."
+      - id: d
+        text: "The realm key."
+        explanation: "Not correct. Keys are separate."
+    correct_option: a
+    explanation: "Correct. It has a count and an expiration."
+
+  - id: ats090-final-q110b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the scope of registration policies"
+    source_readings:
+      - sections/section-110/module-01/course-02-client-registration-policies.md
+    prompt: "Where do client registration policies apply?"
+    options:
+      - id: a
+        text: "Only to the registration endpoints."
+        explanation: "Correct. Admin console changes are not checked."
+      - id: b
+        text: "To every client change."
+        explanation: "Not correct. That describes client policies."
+      - id: c
+        text: "Only to confidential clients."
+        explanation: "Not correct. They do not depend on client type."
+      - id: d
+        text: "Only to SAML clients."
+        explanation: "Not correct. They are protocol independent."
+    correct_option: a
+    explanation: "Correct. Admin console changes are not checked."
+
+  - id: ats090-final-q110c
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain a policy write"
+    source_readings:
+      - sections/section-110/module-01/course-03-client-profiles-and-policies.md
+    prompt: "What happens when you write `client-policies/policies` with only one policy?"
+    options:
+      - id: a
+        text: "The policy is added to the others."
+        explanation: "Not correct. A write replaces the custom set."
+      - id: b
+        text: "All custom policies are replaced by the one you sent."
+        explanation: "Correct. Send the full list."
+      - id: c
+        text: "The write is rejected."
+        explanation: "Not correct. It is accepted."
+      - id: d
+        text: "Only the name changes."
+        explanation: "Not correct. The whole document is replaced."
+    correct_option: b
+    explanation: "Correct. Send the full list."
+  - id: ats090-final-q120a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the secret code"
+    source_readings:
+      - sections/section-120/module-01/course-01-how-the-device-flow-works.md
+    prompt: "Which code must only the device keep?"
+    options:
+      - id: a
+        text: "The user code."
+        explanation: "Not correct. It is shown to the user."
+      - id: b
+        text: "The device code."
+        explanation: "Correct. It is long, secret and used for polling."
+      - id: c
+        text: "The verification address."
+        explanation: "Not correct. It is shown to the user."
+      - id: d
+        text: "The client ID."
+        explanation: "Not correct. It is not secret."
+    correct_option: b
+    explanation: "Correct. It is long, secret and used for polling."
+
+  - id: ats090-final-q120b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the attribute"
+    source_readings:
+      - sections/section-120/module-01/course-02-enabling-the-grant-on-a-client.md
+    prompt: "Which client attribute turns the device grant on?"
+    options:
+      - id: a
+        text: "`oauth2.device.authorization.grant.enabled`."
+        explanation: "Correct. It is set per client."
+      - id: b
+        text: "`directAccessGrantsEnabled`."
+        explanation: "Not correct. That is the password grant."
+      - id: c
+        text: "`standardFlowEnabled`."
+        explanation: "Not correct. That is the code flow."
+      - id: d
+        text: "`implicitFlowEnabled`."
+        explanation: "Not correct. That is the implicit flow."
+    correct_option: a
+    explanation: "Correct. It is set per client."
+
+  - id: ats090-final-q120c
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Describe device code phishing"
+    source_readings:
+      - sections/section-120/module-01/course-04-security-of-the-device-flow.md
+    prompt: "What is device code phishing?"
+    options:
+      - id: a
+        text: "An attacker starts a request and tricks a victim into approving its user code."
+        explanation: "Correct. The attacker's device then holds the victim's tokens."
+      - id: b
+        text: "An attacker guesses the realm name."
+        explanation: "Not correct. Not related to codes."
+      - id: c
+        text: "An attacker steals a refresh token from a log."
+        explanation: "Not correct. That is token theft."
+      - id: d
+        text: "An attacker sends a SAML assertion."
+        explanation: "Not correct. Not related."
+    correct_option: a
+    explanation: "Correct. The attacker's device then holds the victim's tokens."
+  - id: ats090-final-q130a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the confirmation claim"
+    source_readings:
+      - sections/section-130/module-01/course-01-bearer-tokens-and-their-weakness.md
+    prompt: "Which claim holds the fingerprint of the key a token is bound to?"
+    options:
+      - id: a
+        text: "`azp`."
+        explanation: "Not correct. That is the authorized party."
+      - id: b
+        text: "`cnf`."
+        explanation: "Correct. The confirmation claim."
+      - id: c
+        text: "`aud`."
+        explanation: "Not correct. That is the audience."
+      - id: d
+        text: "`scope`."
+        explanation: "Not correct. That lists scopes."
+    correct_option: b
+    explanation: "Correct. The confirmation claim."
+
+  - id: ats090-final-q130b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the client attribute"
+    source_readings:
+      - sections/section-130/module-01/course-02-dpop-in-keycloak.md
+    prompt: "Which client attribute requires DPoP-bound tokens?"
+    options:
+      - id: a
+        text: "`dpop.bound.access.tokens`."
+        explanation: "Correct. Set it to true."
+      - id: b
+        text: "`tls.client.certificate.bound.access.tokens`."
+        explanation: "Not correct. That is for mutual TLS."
+      - id: c
+        text: "`access.token.lifespan`."
+        explanation: "Not correct. That sets the lifetime."
+      - id: d
+        text: "`pkce.code.challenge.method`."
+        explanation: "Not correct. That is PKCE."
+    correct_option: a
+    explanation: "Correct. Set it to true."
+
+  - id: ats090-final-q130c
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain a proxy risk"
+    source_readings:
+      - sections/section-130/module-01/course-03-mutual-tls-and-certificate-bound-tokens.md
+    prompt: "A proxy ends TLS and does not pass the client certificate. What is the result for certificate-bound tokens?"
+    options:
+      - id: a
+        text: "They work as usual."
+        explanation: "Not correct. Keycloak sees no client certificate."
+      - id: b
+        text: "They fail, or bind the wrong certificate."
+        explanation: "Correct. The real certificate never reaches Keycloak."
+      - id: c
+        text: "They become DPoP tokens."
+        explanation: "Not correct. They do not change type."
+      - id: d
+        text: "They gain a longer lifetime."
+        explanation: "Not correct. Not related."
+    correct_option: b
+    explanation: "Correct. The real certificate never reaches Keycloak."
+  - id: ats090-final-q140a
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the client type for a single-page app"
+    source_readings:
+      - sections/section-140/module-01/course-01-choosing-how-to-secure-an-application.md
+    prompt: "Which client type fits a single-page application?"
+    options:
+      - id: a
+        text: "Confidential with a secret in the code."
+        explanation: "Not correct. A secret in the browser is public."
+      - id: b
+        text: "Public with PKCE."
+        explanation: "Correct. No secret is needed."
+      - id: c
+        text: "Bearer-only."
+        explanation: "Not correct. Not used for sign-in."
+      - id: d
+        text: "Service account only."
+        explanation: "Not correct. That has no user sign-in."
+    correct_option: b
+    explanation: "Correct. No secret is needed."
+
+  - id: ats090-final-q140b
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain full.path"
+    source_readings:
+      - sections/section-140/module-01/course-02-client-configuration-for-a-proxy.md
+    prompt: "A group membership mapper has `full.path` off. What does a member of the group `staff` get?"
+    options:
+      - id: a
+        text: "The value `/staff`."
+        explanation: "Not correct. That is with the path on."
+      - id: b
+        text: "The value `staff`."
+        explanation: "Correct. Only the group name."
+      - id: c
+        text: "No claim."
+        explanation: "Not correct. The claim is written."
+      - id: d
+        text: "The group ID."
+        explanation: "Not correct. It writes the name."
+    correct_option: b
+    explanation: "Correct. Only the group name."
+
+  - id: ats090-final-q140c
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain an issuer mismatch"
+    source_readings:
+      - sections/section-140/module-01/course-03-validating-tokens-in-a-resource-server.md
+      - sections/section-140/module-01/course-04-gateways-headers-and-logout.md
+    prompt: "Tokens say `iss` is `http://keycloak:8080/realms/inventory`, but an API expects `https://auth.example.com/realms/inventory`. What happens?"
+    options:
+      - id: a
+        text: "The API accepts the tokens."
+        explanation: "Not correct. The issuer check fails."
+      - id: b
+        text: "The API rejects every token."
+        explanation: "Correct. The issuer differs."
+      - id: c
+        text: "Keycloak rotates the keys."
+        explanation: "Not correct. Not related."
+      - id: d
+        text: "The API switches to introspection."
+        explanation: "Not correct. It does not switch on its own."
+    correct_option: b
+    explanation: "Correct. The issuer differs."

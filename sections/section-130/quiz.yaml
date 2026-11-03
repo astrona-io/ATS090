@@ -1,0 +1,245 @@
+# Knowledge check for section 130. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-130
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-130
+  title: "Sender-Constrained Tokens: DPoP And Mutual TLS"
+placement:
+  position: after
+  reading: sections/section-130/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-130-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say what a bearer token is"
+    source_readings:
+      - sections/section-130/module-01/course-01-bearer-tokens-and-their-weakness.md
+    prompt: "What makes a bearer token a risk?"
+    options:
+      - id: a
+        text: "Whoever holds the token can use it."
+        explanation: "Correct. The resource server cannot tell who sent it."
+      - id: b
+        text: "It cannot be signed."
+        explanation: "Not correct. Tokens are signed."
+      - id: c
+        text: "It has no expiry."
+        explanation: "Not correct. Tokens have an expiry."
+      - id: d
+        text: "It works only once."
+        explanation: "Not correct. It works until it expires."
+    correct_option: a
+    explanation: "Correct. The resource server cannot tell who sent it."
+
+  - id: ats090-130-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the confirmation claim"
+    source_readings:
+      - sections/section-130/module-01/course-01-bearer-tokens-and-their-weakness.md
+    prompt: "Which claim holds the fingerprint of the key a token is bound to?"
+    options:
+      - id: a
+        text: "`azp`."
+        explanation: "Not correct. That is the authorized party."
+      - id: b
+        text: "`cnf`."
+        explanation: "Correct. The confirmation claim."
+      - id: c
+        text: "`aud`."
+        explanation: "Not correct. That is the audience."
+      - id: d
+        text: "`scope`."
+        explanation: "Not correct. That lists scopes."
+    correct_option: b
+    explanation: "Correct. The confirmation claim."
+
+  - id: ats090-130-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what a DPoP proof is"
+    source_readings:
+      - sections/section-130/module-01/course-02-dpop-in-keycloak.md
+    prompt: "What is a DPoP proof?"
+    options:
+      - id: a
+        text: "A signed JWT sent in the `DPoP` header with each request."
+        explanation: "Correct. It names the method and the URL."
+      - id: b
+        text: "A second access token."
+        explanation: "Not correct. It is a proof, not a token."
+      - id: c
+        text: "A client secret."
+        explanation: "Not correct. It is not a secret."
+      - id: d
+        text: "A TLS certificate."
+        explanation: "Not correct. That is mutual TLS."
+    correct_option: a
+    explanation: "Correct. It names the method and the URL."
+
+  - id: ats090-130-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name a DPoP proof claim"
+    source_readings:
+      - sections/section-130/module-01/course-02-dpop-in-keycloak.md
+    prompt: "Which proof claim names the HTTP method of the request?"
+    options:
+      - id: a
+        text: "`htm`."
+        explanation: "Correct. HTTP method."
+      - id: b
+        text: "`htu`."
+        explanation: "Not correct. That is the URL."
+      - id: c
+        text: "`jti`."
+        explanation: "Not correct. That is the unique id."
+      - id: d
+        text: "`ath`."
+        explanation: "Not correct. That hashes the access token."
+    correct_option: a
+    explanation: "Correct. HTTP method."
+
+  - id: ats090-130-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the client attribute"
+    source_readings:
+      - sections/section-130/module-01/course-02-dpop-in-keycloak.md
+    prompt: "Which client attribute requires DPoP-bound tokens?"
+    options:
+      - id: a
+        text: "`dpop.bound.access.tokens`."
+        explanation: "Correct. Set it to true."
+      - id: b
+        text: "`tls.client.certificate.bound.access.tokens`."
+        explanation: "Not correct. That is for mutual TLS."
+      - id: c
+        text: "`access.token.lifespan`."
+        explanation: "Not correct. That sets the lifetime."
+      - id: d
+        text: "`pkce.code.challenge.method`."
+        explanation: "Not correct. That is PKCE."
+    correct_option: a
+    explanation: "Correct. Set it to true."
+
+  - id: ats090-130-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a missing proof"
+    source_readings:
+      - sections/section-130/module-01/course-02-dpop-in-keycloak.md
+    prompt: "A client requires DPoP-bound tokens. It sends a token request with no proof. What happens?"
+    options:
+      - id: a
+        text: "Keycloak issues a plain bearer token."
+        explanation: "Not correct. The setting forbids it."
+      - id: b
+        text: "Keycloak refuses the request."
+        explanation: "Correct. A valid proof is required."
+      - id: c
+        text: "Keycloak asks for the user password."
+        explanation: "Not correct. Not related."
+      - id: d
+        text: "Keycloak encrypts the token."
+        explanation: "Not correct. Not related."
+    correct_option: b
+    explanation: "Correct. A valid proof is required."
+
+  - id: ats090-130-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what the thumbprint in cnf is for mTLS"
+    source_readings:
+      - sections/section-130/module-01/course-03-mutual-tls-and-certificate-bound-tokens.md
+    prompt: "In a certificate-bound token, what does `x5t#S256` hold?"
+    options:
+      - id: a
+        text: "The thumbprint of the client certificate."
+        explanation: "Correct. The resource server compares it with the connection."
+      - id: b
+        text: "The thumbprint of the DPoP key."
+        explanation: "Not correct. That is `jkt`."
+      - id: c
+        text: "The hash of the client secret."
+        explanation: "Not correct. Secrets are not in tokens."
+      - id: d
+        text: "The hash of the realm key."
+        explanation: "Not correct. Not related."
+    correct_option: a
+    explanation: "Correct. The resource server compares it with the connection."
+
+  - id: ats090-130-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Name what mTLS needs"
+    source_readings:
+      - sections/section-130/module-01/course-03-mutual-tls-and-certificate-bound-tokens.md
+    prompt: "Which is needed to issue certificate-bound tokens?"
+    options:
+      - id: a
+        text: "HTTPS with client certificates enabled on the server."
+        explanation: "Correct. Plain HTTP has no certificate to bind."
+      - id: b
+        text: "A DPoP header."
+        explanation: "Not correct. That is DPoP."
+      - id: c
+        text: "A public client."
+        explanation: "Not correct. Not required."
+      - id: d
+        text: "A SAML client."
+        explanation: "Not correct. Not related."
+    correct_option: a
+    explanation: "Correct. Plain HTTP has no certificate to bind."
+
+  - id: ats090-130-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain a proxy risk"
+    source_readings:
+      - sections/section-130/module-01/course-03-mutual-tls-and-certificate-bound-tokens.md
+    prompt: "A proxy ends TLS and does not pass the client certificate. What is the result for certificate-bound tokens?"
+    options:
+      - id: a
+        text: "They work as usual."
+        explanation: "Not correct. Keycloak sees no client certificate."
+      - id: b
+        text: "They fail, or bind the wrong certificate."
+        explanation: "Correct. The real certificate never reaches Keycloak."
+      - id: c
+        text: "They become DPoP tokens."
+        explanation: "Not correct. They do not change type."
+      - id: d
+        text: "They gain a longer lifetime."
+        explanation: "Not correct. Not related."
+    correct_option: b
+    explanation: "Correct. The real certificate never reaches Keycloak."
+
+  - id: ats090-130-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Pick the rollout step"
+    source_readings:
+      - sections/section-130/module-01/course-04-choosing-and-rolling-out.md
+    prompt: "What must be ready before you require binding on a client?"
+    options:
+      - id: a
+        text: "The resource server must verify the proof or the certificate."
+        explanation: "Correct. Otherwise a bound token gains nothing."
+      - id: b
+        text: "The realm must be deleted."
+        explanation: "Not correct. Not needed."
+      - id: c
+        text: "All clients must switch at once."
+        explanation: "Not correct. Roll out client by client."
+      - id: d
+        text: "Token lifetimes must be raised."
+        explanation: "Not correct. Keep them short."
+    correct_option: a
+    explanation: "Correct. Otherwise a bound token gains nothing."

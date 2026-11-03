@@ -14,10 +14,11 @@ This section takes the flow apart. You run every step by hand from a terminal, s
 - How to make Keycloak require PKCE with `S256` for a client.
 - What the `state` and `nonce` values protect against, and where each one comes back.
 - Which claims of the ID token a client checks.
+- The UserInfo endpoint, the `openid` scope, and how default and optional client scopes decide which claims an application gets.
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, and the landing page starts it for you.
+The section has one module. It has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, and the landing page starts it for you.
 
 ### 1. Sign Users In With The Authorization Code Flow And PKCE
 
@@ -26,7 +27,8 @@ The playground holds the namespace `pkce-demo` with Keycloak, the realm `invento
 1. The Authorization Code Flow Step By Step
 2. Proof Key For Code Exchange (PKCE), followed by the lab **Require PKCE With S256 For A Public Client**
 3. State, Nonce And The ID Token
-4. Summary
+4. UserInfo, Scopes And The openid Scope, followed by the lab **Give An Application The Claims It Asks For**
+5. Summary
 
 ## Section capstone: Repair The Login Of A Single Page Application
 

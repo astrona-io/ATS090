@@ -6,7 +6,7 @@ An **API gateway** is a service in front of one or more APIs that receives every
 
 This module is about that hand-over. Keep one sentence in mind: **each service should receive a token meant for it, and only for it.** A token whose audience lists every service works everywhere, so a service that leaks it leaks access to all of them.
 
-The module has three parts. **Forwarding The Token Through A Gateway** sends a token through the gateway and shows why it fails, and why widening its audience is the wrong fix. **Standard Token Exchange** lets the gateway exchange the token for one meant for the API. **Downscoping And A Second API** shows how the gateway asks for exactly one audience when it may call several APIs. A graded lab follows the second part.
+The module has four parts. **Forwarding The Token Through A Gateway** sends a token through the gateway and shows why it fails, and why widening its audience is the wrong fix. **Standard Token Exchange** lets the gateway exchange the token for one meant for the API. **Downscoping And A Second API** shows how the gateway asks for exactly one audience when it may call several APIs. A graded lab follows the second part. **Troubleshooting A Token Exchange** breaks the exchange four ways and shows how to tell the failures apart; a second graded lab follows it.
 
 ## Learning objectives
 
@@ -18,6 +18,7 @@ After this module you can:
 - Send a token exchange request and read the new token's `sub`, `azp` and `aud`.
 - State the two audience rules of token exchange.
 - Ask for a token limited to one audience, and recognise the error for an audience that is not available.
+- Tell the four failures of an exchange apart, and fix each one at the client that causes it.
 
 ## Before you start
 

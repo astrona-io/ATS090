@@ -6,7 +6,7 @@ The **authorization code flow** is the browser sign-in of OAuth 2.0 and OpenID C
 
 This module runs the flow by hand. Keep one sentence in mind: **every value the application sends at the start comes back at a later step, and that is where it is checked.** The redirect URI comes back with the code, the code challenge comes back as the code verifier, and the nonce comes back inside the ID token.
 
-The module has three parts. **The Authorization Code Flow Step By Step** sends each request of the flow from a terminal and reads Keycloak's answer. **Proof Key For Code Exchange (PKCE)** adds the code verifier and the code challenge, and makes Keycloak require them. **State, Nonce And The ID Token** shows the two values that protect the client against forged answers and replayed tokens. A graded lab follows the second part.
+The module has four parts. **The Authorization Code Flow Step By Step** sends each request of the flow from a terminal and reads Keycloak's answer. **Proof Key For Code Exchange (PKCE)** adds the code verifier and the code challenge, and makes Keycloak require them. **State, Nonce And The ID Token** shows the two values that protect the client against forged answers and replayed tokens. A graded lab follows the second part. **UserInfo, Scopes And The openid Scope** shows how an application asks Keycloak about the signed-in user, and which client scopes decide the claims it gets; a second graded lab follows it.
 
 ## Learning objectives
 
@@ -18,6 +18,8 @@ After this module you can:
 - Create a code verifier and an `S256` code challenge, and explain why `plain` is weaker.
 - Make Keycloak require PKCE with `S256` for a client, and prove it refuses requests without it.
 - Explain what `state` and `nonce` protect against, and check the nonce in an ID token.
+- Call the UserInfo endpoint, and explain what the `openid` scope changes.
+- Tell default client scopes from optional ones, and find a missing claim in a client's scopes.
 
 ## Before you start
 

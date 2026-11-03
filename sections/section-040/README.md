@@ -13,10 +13,11 @@ This section follows a user's token through a gateway. You see what goes wrong w
 - Standard token exchange (RFC 8693) in Keycloak 26: who may exchange, what the request looks like, and what the new token contains.
 - The audience rules of token exchange: the subject token must name the requester, and the requester can only get audiences it was given.
 - Downscoping: asking for a token with one audience only.
+- The four questions to ask when an exchange fails, and where each answer is fixed.
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, and the landing page starts it for you.
+The section has one module. It has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, and the landing page starts it for you.
 
 ### 1. Propagate Tokens Through An API Gateway
 
@@ -25,7 +26,8 @@ The playground holds the namespace `exchange-demo` with Keycloak, the API `inven
 1. Forwarding The Token Through A Gateway
 2. Standard Token Exchange, followed by the lab **Exchange A User Token At The Gateway**
 3. Downscoping And A Second API
-4. Summary
+4. Troubleshooting A Token Exchange, followed by the lab **Repair A Failing Token Exchange**
+5. Summary
 
 ## Section capstone: Propagate A User To A Second API
 

@@ -1,0 +1,56 @@
+# Correct The Permissions Of A Report API
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-capstone-100"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-capstone-100-setup"
+      description: "Creates the resource server invoice-api with an inverted finance policy and a delete permission that finance users pass"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-finance-user"
+      description: "Confirms a finance user may read and not delete"
+      type: "file"
+      source: "validation/validate-finance-user.sh"
+    - name: "validate-finance-admin"
+      description: "Confirms a finance and report-admin user may read and delete"
+      type: "file"
+      source: "validation/validate-finance-admin.sh"
+    - name: "validate-no-role"
+      description: "Confirms a user with no role may do neither"
+      type: "file"
+      source: "validation/validate-no-role.sh"
+    - name: "validate-enforcing"
+      description: "Confirms the resource server is still in enforcing mode"
+      type: "file"
+      source: "validation/validate-enforcing.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/keycloak/keycloak:26.8.1

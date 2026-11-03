@@ -243,3 +243,72 @@ questions:
         explanation: "Not correct. The nonce has nothing to do with CORS."
     correct_option: a
     explanation: "Correct. A token from another sign-in carries another nonce."
+
+  - id: ats090-020-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say what the openid scope does"
+    source_readings:
+      - sections/section-020/module-01/course-04-userinfo-and-scopes.md
+    prompt: "What does the `openid` scope change in a token request?"
+    options:
+      - id: a
+        text: "It makes the access token last longer."
+        explanation: "Not correct. Lifetimes are separate settings."
+      - id: b
+        text: "It gives the token every role of the user."
+        explanation: "Not correct. Roles follow the full scope setting and the scope mappings."
+      - id: c
+        text: "It turns on PKCE."
+        explanation: "Not correct. PKCE is a separate client setting."
+      - id: d
+        text: "It makes the request an OpenID Connect request, so there is an ID token and UserInfo works."
+        explanation: "Correct. Without it the request is plain OAuth 2.0."
+    correct_option: d
+    explanation: "Correct. Without it the request is plain OAuth 2.0."
+
+  - id: ats090-020-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find a missing claim in the client scopes"
+    source_readings:
+      - sections/section-020/module-01/course-04-userinfo-and-scopes.md
+    prompt: "The UserInfo answer for a user who has an email address does not contain `email`. What should you check first?"
+    options:
+      - id: a
+        text: "Whether the `email` client scope is on the client's default scopes."
+        explanation: "Correct. A client that does not ask for the scope does not get the claims."
+      - id: b
+        text: "Whether the user's password has expired."
+        explanation: "Not correct. A password does not decide which claims a token has."
+      - id: c
+        text: "Whether the realm has a second user with the same name."
+        explanation: "Not correct. The token is for one user, and the claims come from that user."
+      - id: d
+        text: "Whether the redirect URI is exact."
+        explanation: "Not correct. Redirect URIs decide where codes go, not which claims there are."
+    correct_option: a
+    explanation: "Correct. A client that does not ask for the scope does not get the claims."
+
+  - id: ats090-020-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell default scopes from optional scopes"
+    source_readings:
+      - sections/section-020/module-01/course-04-userinfo-and-scopes.md
+    prompt: "What is the difference between a default client scope and an optional client scope?"
+    options:
+      - id: a
+        text: "A default scope is for users and an optional scope is for services."
+        explanation: "Not correct. Both kinds can be used by any kind of client."
+      - id: b
+        text: "A default scope is added to every token of the client. An optional scope is added only when the request names it in `scope`."
+        explanation: "Correct. Optional scopes suit data that only some parts of an application need."
+      - id: c
+        text: "A default scope has no mappers."
+        explanation: "Not correct. Both kinds are bundles of mappers."
+      - id: d
+        text: "An optional scope is added without a request, and a default scope never is."
+        explanation: "Not correct. That is backwards."
+    correct_option: b
+    explanation: "Correct. Optional scopes suit data that only some parts of an application need."

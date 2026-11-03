@@ -1,0 +1,56 @@
+# Lock Down Partner Client Registration
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-capstone-110"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-capstone-110-setup"
+      description: "Creates the realm inventory with a partner profile that has no password-grant rule and a policy that names no profile"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-pkce-enforced"
+      description: "Confirms a new public client is set to S256"
+      type: "file"
+      source: "validation/validate-pkce-enforced.sh"
+    - name: "validate-password-grant-rejected"
+      description: "Confirms the admin API rejects a client with the password grant"
+      type: "file"
+      source: "validation/validate-password-grant-rejected.sh"
+    - name: "validate-registration-password-grant-rejected"
+      description: "Confirms dynamic registration rejects the password grant"
+      type: "file"
+      source: "validation/validate-registration-password-grant-rejected.sh"
+    - name: "validate-registration-works"
+      description: "Confirms dynamic registration of a normal client still works"
+      type: "file"
+      source: "validation/validate-registration-works.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/keycloak/keycloak:26.8.1

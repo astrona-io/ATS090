@@ -1,0 +1,56 @@
+# Secure A SAML Service Provider
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-capstone-090"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-capstone-090-setup"
+      description: "Creates the realm inventory with a SAML client that has a wildcard ACS address, unsigned assertions, no email attribute and a misnamed role attribute"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-redirect-uri-exact"
+      description: "Confirms the only valid redirect URI is the ACS address"
+      type: "file"
+      source: "validation/validate-redirect-uri-exact.sh"
+    - name: "validate-assertion-signed"
+      description: "Confirms the assertion is signed"
+      type: "file"
+      source: "validation/validate-assertion-signed.sh"
+    - name: "validate-email-attribute"
+      description: "Confirms a mapper writes the email attribute from the user's email"
+      type: "file"
+      source: "validation/validate-email-attribute.sh"
+    - name: "validate-role-attribute"
+      description: "Confirms the role list mapper writes the attribute Role"
+      type: "file"
+      source: "validation/validate-role-attribute.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/keycloak/keycloak:26.8.1

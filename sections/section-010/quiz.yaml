@@ -243,3 +243,72 @@ questions:
         explanation: "Not correct. Keycloak leaves the header out for an origin that is not allowed."
     correct_option: b
     explanation: "Correct. `curl` ignores CORS. A browser would hide the answer from the script."
+
+  - id: ats090-010-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the flows a client can switch on"
+    source_readings:
+      - sections/section-010/module-01/course-04-client-settings-and-capabilities.md
+    prompt: "Which flow does a single page application that signs users in need?"
+    options:
+      - id: a
+        text: "The implicit flow."
+        explanation: "Not correct. It is a legacy flow, and current guidance replaces it with the code flow and PKCE."
+      - id: b
+        text: "Direct access grants."
+        explanation: "Not correct. That is the password grant, which a browser application must not use."
+      - id: c
+        text: "Service accounts roles."
+        explanation: "Not correct. That is the client credentials grant for a service with no user."
+      - id: d
+        text: "The standard flow, with PKCE."
+        explanation: "Correct. The authorization code flow is the one a browser application uses."
+    correct_option: d
+    explanation: "Correct. The authorization code flow is the one a browser application uses."
+
+  - id: ats090-010-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prove that a grant is closed"
+    source_readings:
+      - sections/section-010/module-01/course-04-client-settings-and-capabilities.md
+    prompt: "A client has direct access grants turned off. What does a password grant request for it return?"
+    options:
+      - id: a
+        text: "The error `unauthorized_client` and no token."
+        explanation: "Correct. The client is not allowed to use that grant, so Keycloak does not check the password."
+      - id: b
+        text: "The error `invalid_grant`."
+        explanation: "Not correct. That is the answer for a wrong password or an expired code."
+      - id: c
+        text: "A token with fewer roles."
+        explanation: "Not correct. Flows are on or off. Roles are a different setting."
+      - id: d
+        text: "A login page."
+        explanation: "Not correct. The password grant never shows a page."
+    correct_option: a
+    explanation: "Correct. The client is not allowed to use that grant, so Keycloak does not check the password."
+
+  - id: ats090-010-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what Full scope allowed does"
+    source_readings:
+      - sections/section-010/module-01/course-04-client-settings-and-capabilities.md
+    prompt: "What does turning off Full scope allowed on a client change?"
+    options:
+      - id: a
+        text: "The client can no longer sign in users."
+        explanation: "Not correct. Sign-in does not depend on it."
+      - id: b
+        text: "Its tokens carry only the roles that its scope mappings list, not every role of the user."
+        explanation: "Correct. The user's other roles stay out of the token."
+      - id: c
+        text: "The user loses the roles."
+        explanation: "Not correct. The user keeps every role. Only the token changes."
+      - id: d
+        text: "The token lifetime becomes shorter."
+        explanation: "Not correct. Lifetimes are separate settings."
+    correct_option: b
+    explanation: "Correct. The user's other roles stay out of the token."

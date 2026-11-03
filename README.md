@@ -25,14 +25,20 @@ contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | Clients, Redirect URIs And Web Origins | 1 | 1 + capstone | Clients |
-| [020](sections/section-020) | The Authorization Code Flow With PKCE | 1 | 1 + capstone | Browser sign-in |
+| [010](sections/section-010) | Clients, Redirect URIs And Web Origins | 1 | 2 + capstone | Clients |
+| [020](sections/section-020) | The Authorization Code Flow With PKCE | 1 | 2 + capstone | Browser sign-in |
 | [030](sections/section-030) | Validating Access Tokens In An API | 1 | 1 + capstone | Token validation |
-| [040](sections/section-040) | Token Propagation Through An API Gateway | 1 | 1 + capstone | Token propagation |
+| [040](sections/section-040) | Token Propagation Through An API Gateway | 1 | 2 + capstone | Token propagation |
 | [050](sections/section-050) | Client Credentials And Service Accounts | 1 | 1 + capstone | Service clients |
 | [060](sections/section-060) | Token Lifetimes, Refresh Tokens And Sessions | 1 | 1 + capstone | Token lifetimes and sessions |
 | [070](sections/section-070) | Logout, Back-Channel Logout And Session Control | 1 | 1 + capstone | Logout and session control |
 | [080](sections/section-080) | Client Scopes, Protocol Mappers And Token Claims | 1 | 1 + capstone | Client scopes, mappers and token claims |
+| [090](sections/section-090) | Keycloak As A SAML Identity Provider | 1 | 1 + capstone | SAML clients |
+| [100](sections/section-100) | Authorization Services | 1 | 1 + capstone | authorization services |
+| [110](sections/section-110) | Client Registration And Client Policies | 1 | 1 + capstone | client registration |
+| [120](sections/section-120) | OAuth 2.0 Device Authorization Grant | 1 | 1 + capstone | the device authorization grant |
+| [130](sections/section-130) | Sender-Constrained Tokens: DPoP And Mutual TLS | 1 | 1 + capstone | sender-constrained tokens |
+| [140](sections/section-140) | Securing Applications With Libraries, Proxies And Gateways | 1 | 1 + capstone | securing applications |
 
 The order follows one request: how the application is registered in
 Keycloak, how the user signs in through it, how the API checks the token it
@@ -44,14 +50,20 @@ receives, and how the token travels through a gateway to a second API.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Configure Clients For Applications And Services](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
-| 020-01 | [Sign Users In With The Authorization Code Flow And PKCE](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 010-01 | [Configure Clients For Applications And Services](sections/section-010/module-01/course.md) | 4 | [lab-01](sections/section-010/module-01/labs/lab-01), [lab-02](sections/section-010/module-01/labs/lab-02) |
+| 020-01 | [Sign Users In With The Authorization Code Flow And PKCE](sections/section-020/module-01/course.md) | 4 | [lab-01](sections/section-020/module-01/labs/lab-01), [lab-02](sections/section-020/module-01/labs/lab-02) |
 | 030-01 | [Validate Access Tokens In An API](sections/section-030/module-01/course.md) | 4 | [lab-01](sections/section-030/module-01/labs/lab-01) |
-| 040-01 | [Propagate Tokens Through An API Gateway](sections/section-040/module-01/course.md) | 3 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 040-01 | [Propagate Tokens Through An API Gateway](sections/section-040/module-01/course.md) | 4 | [lab-01](sections/section-040/module-01/labs/lab-01), [lab-02](sections/section-040/module-01/labs/lab-02) |
 | 050-01 | [Authenticate Service Clients With Client Credentials](sections/section-050/module-01/course.md) | 4 | [lab-01](sections/section-050/module-01/labs/lab-01) |
 | 060-01 | [Control Token Lifetimes, Refresh Tokens And Sessions](sections/section-060/module-01/course.md) | 4 | [lab-01](sections/section-060/module-01/labs/lab-01) |
 | 070-01 | [End Sessions With Logout And Admin Control](sections/section-070/module-01/course.md) | 4 | [lab-01](sections/section-070/module-01/labs/lab-01) |
 | 080-01 | [Shape Tokens With Client Scopes And Protocol Mappers](sections/section-080/module-01/course.md) | 4 | [lab-01](sections/section-080/module-01/labs/lab-01) |
+| 090-01 | [Keycloak As A SAML Identity Provider](sections/section-090/module-01/course.md) | 4 | [lab-01](sections/section-090/module-01/labs/lab-01) |
+| 100-01 | [Authorization Services](sections/section-100/module-01/course.md) | 4 | [lab-01](sections/section-100/module-01/labs/lab-01) |
+| 110-01 | [Client Registration And Client Policies](sections/section-110/module-01/course.md) | 4 | [lab-01](sections/section-110/module-01/labs/lab-01) |
+| 120-01 | [OAuth 2.0 Device Authorization Grant](sections/section-120/module-01/course.md) | 4 | [lab-01](sections/section-120/module-01/labs/lab-01) |
+| 130-01 | [Sender-Constrained Tokens: DPoP And Mutual TLS](sections/section-130/module-01/course.md) | 4 | [lab-01](sections/section-130/module-01/labs/lab-01) |
+| 140-01 | [Securing Applications With Libraries, Proxies And Gateways](sections/section-140/module-01/course.md) | 4 | [lab-01](sections/section-140/module-01/labs/lab-01) |
 
 ---
 
@@ -67,6 +79,12 @@ receives, and how the token travels through a gateway to a second API.
 | [060](sections/section-060/capstone/labs/lab-01) | Fix The Token Lifetimes Of A Client | a client override of one day, no refresh token rotation, the offline_access scope removed from the client, a one-minute offline idle time |
 | [070](sections/section-070/capstone/labs/lab-01) | Repair The Logout Of A Client | a wildcard post-logout redirect, no back-channel logout URL, a logout token without the session id, live sessions of a suspect account |
 | [080](sections/section-080/capstone/labs/lab-01) | Repair The Token Contents Of A Client | a groups mapper that skips the access token, Full Scope Allowed leaking an admin role, a needed client scope that is only optional |
+| [090](sections/section-090/capstone/labs/lab-01) | Secure A SAML Service Provider | a wildcard ACS address, an unsigned assertion, no email attribute, a misnamed role attribute |
+| [100](sections/section-100/capstone/labs/lab-01) | Correct The Permissions Of A Report API | an inverted finance policy and a delete permission bound to the wrong policy |
+| [110](sections/section-110/capstone/labs/lab-01) | Lock Down Partner Client Registration | a policy that names no profile and a profile without a password-grant rule |
+| [120](sections/section-120/capstone/labs/lab-01) | Secure A Device Login For A TV App | a confidential client, a long code lifetime, a fast polling interval and direct access grants on |
+| [130](sections/section-130/capstone/labs/lab-01) | Bind Tokens For A Payments Platform | a payments client without DPoP, a long token lifetime and a partner client that wrongly requires DPoP |
+| [140](sections/section-140/capstone/labs/lab-01) | Protect An Orders API Behind A Gateway | a wildcard redirect address, a long token lifetime, a misspelled audience and a misnamed groups claim |
 
 ---
 

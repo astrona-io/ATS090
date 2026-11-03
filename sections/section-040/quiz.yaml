@@ -243,3 +243,72 @@ questions:
         explanation: "Not correct. An exchange adds no permissions."
     correct_option: a
     explanation: "Correct. The audience check passes. The role check fails."
+
+  - id: ats090-040-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Fix a refused exchange at the right client"
+    source_readings:
+      - sections/section-040/module-01/course-04-troubleshooting-token-exchange.md
+    prompt: "The gateway is allowed to exchange, but Keycloak refuses because the subject token does not name the gateway. Where is the fix?"
+    options:
+      - id: a
+        text: "On the gateway: add an audience mapper for the gateway to it."
+        explanation: "Not correct. That changes the gateway's own tokens, not the token that was already sent."
+      - id: b
+        text: "On the API: add the gateway to its valid redirect URIs."
+        explanation: "Not correct. Redirect URIs are not part of the exchange."
+      - id: c
+        text: "On the user: give `alice` a new role."
+        explanation: "Not correct. Roles do not change who a token is meant for."
+      - id: d
+        text: "On the client that issued the token: add an audience mapper for the gateway to it."
+        explanation: "Correct. The first rule is about the token that was sent, so the first client must name the gateway."
+    correct_option: d
+    explanation: "Correct. The first rule is about the token that was sent, so the first client must name the gateway."
+
+  - id: ats090-040-q12
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Recognise an authentication failure at the token endpoint"
+    source_readings:
+      - sections/section-040/module-01/course-04-troubleshooting-token-exchange.md
+    prompt: "An exchange with a wrong client secret gets `invalid_client` and status `401`. What does that tell you?"
+    options:
+      - id: a
+        text: "The requester failed to authenticate, before the token is looked at."
+        explanation: "Correct. A 401 at the token endpoint is about the client."
+      - id: b
+        text: "The subject token has expired."
+        explanation: "Not correct. That is an error about the token, not about the client."
+      - id: c
+        text: "The audience is not available to the gateway."
+        explanation: "Not correct. That is checked after the client authenticates."
+      - id: d
+        text: "The user `alice` has the wrong password."
+        explanation: "Not correct. No password is sent in an exchange."
+    correct_option: a
+    explanation: "Correct. A 401 at the token endpoint is about the client."
+
+  - id: ats090-040-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Spot an audience the gateway does not need"
+    source_readings:
+      - sections/section-040/module-01/course-04-troubleshooting-token-exchange.md
+    prompt: "An exchange without an `audience` returns a token whose `aud` lists `inventory-api` and `inventory-admin-api`. The gateway only calls `inventory-api`. What is wrong?"
+    options:
+      - id: a
+        text: "Nothing. An exchange always lists every API in the realm."
+        explanation: "Not correct. It lists only what is available to the requester."
+      - id: b
+        text: "The gateway holds an audience it does not use, so a token without `audience` works on the admin API too."
+        explanation: "Correct. Remove the mapper for the admin API from the gateway."
+      - id: c
+        text: "The first client is confidential."
+        explanation: "Not correct. That has no effect on the audiences of the new token."
+      - id: d
+        text: "The exchange is not allowed for the gateway."
+        explanation: "Not correct. The exchange worked, so it is allowed."
+    correct_option: b
+    explanation: "Correct. Remove the mapper for the admin API from the gateway."

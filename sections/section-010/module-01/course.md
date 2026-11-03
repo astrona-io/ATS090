@@ -6,7 +6,7 @@ A **client** is an application or service that asks Keycloak to sign users in or
 
 This module is about those settings. Keep one sentence in mind: **a client setting is a promise about who can use the client, and Keycloak keeps exactly the promise you wrote.** A wildcard redirect URI promises that any website may receive a user's authorization code, and Keycloak keeps that promise too.
 
-The module has three parts. **Public Clients, Confidential Clients And Client Authentication** shows the two client types and how a confidential client proves who it is at the token endpoint. **Valid Redirect URIs And The Front Channel** shows where Keycloak sends the authorization code and why it compares the address exactly. **Web Origins And CORS** shows which websites may read Keycloak's answers in a browser. A graded lab follows the third part.
+The module has four parts. **Public Clients, Confidential Clients And Client Authentication** shows the two client types and how a confidential client proves who it is at the token endpoint. **Valid Redirect URIs And The Front Channel** shows where Keycloak sends the authorization code and why it compares the address exactly. **Web Origins And CORS** shows which websites may read Keycloak's answers in a browser. A graded lab follows the third part. **Client Settings And Capabilities** shows the switches that decide which flows a client may use and how much access its tokens carry, and a second graded lab follows it.
 
 ## Learning objectives
 
@@ -19,6 +19,8 @@ After this module you can:
 - Explain how Keycloak matches a redirect URI, and why `*` is dangerous.
 - Explain what a web origin is, what `+` means, and what CORS protects.
 - Prove a client's settings with a real sign-in, and with a redirect URI and an origin that Keycloak refuses.
+- Name the flows a client can switch on, and turn off the ones it does not use.
+- Explain what Full scope allowed does to the roles in a token.
 
 ## Before you start
 

@@ -1,0 +1,245 @@
+# Knowledge check for section 100. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-100
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-100
+  title: "Authorization Services"
+placement:
+  position: after
+  reading: sections/section-100/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-100-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say what a resource server is"
+    source_readings:
+      - sections/section-100/module-01/course-01-resource-servers-resources-and-scopes.md
+    prompt: "In Keycloak, what makes a client a resource server?"
+    options:
+      - id: a
+        text: "Authorization Services is enabled on the client."
+        explanation: "Correct. The client then holds resources, scopes, policies and permissions."
+      - id: b
+        text: "It is a public client."
+        explanation: "Not correct. Public clients cannot hold authorization settings."
+      - id: c
+        text: "It uses the SAML protocol."
+        explanation: "Not correct. Protocol is unrelated."
+      - id: d
+        text: "It has the role admin."
+        explanation: "Not correct. Roles do not define a resource server."
+    correct_option: a
+    explanation: "Correct. The client then holds resources, scopes, policies and permissions."
+
+  - id: ats090-100-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell a resource from a scope"
+    source_readings:
+      - sections/section-100/module-01/course-01-resource-servers-resources-and-scopes.md
+    prompt: "Which statement is correct?"
+    options:
+      - id: a
+        text: "A scope is the thing protected, a resource is the action."
+        explanation: "Not correct. This is reversed."
+      - id: b
+        text: "A resource is the thing protected, a scope is an action on it."
+        explanation: "Correct. For example the resource invoice and the scope view."
+      - id: c
+        text: "Resources and scopes are the same object."
+        explanation: "Not correct. They are separate objects."
+      - id: d
+        text: "Scopes are only for SAML."
+        explanation: "Not correct. Scopes exist in Authorization Services for any resource."
+    correct_option: b
+    explanation: "Correct. For example the resource invoice and the scope view."
+
+  - id: ats090-100-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what a policy does"
+    source_readings:
+      - sections/section-100/module-01/course-02-policies-and-permissions.md
+    prompt: "What does a policy decide?"
+    options:
+      - id: a
+        text: "Whether a given user or context meets a condition."
+        explanation: "Correct. It answers grant or deny for a condition such as a role."
+      - id: b
+        text: "Which resources exist."
+        explanation: "Not correct. Resources are defined separately."
+      - id: c
+        text: "The lifetime of the access token."
+        explanation: "Not correct. That is a realm setting."
+      - id: d
+        text: "The password rules."
+        explanation: "Not correct. Password policy is a realm setting."
+    correct_option: a
+    explanation: "Correct. It answers grant or deny for a condition such as a role."
+
+  - id: ats090-100-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Say what a permission does"
+    source_readings:
+      - sections/section-100/module-01/course-02-policies-and-permissions.md
+    prompt: "What does a permission link?"
+    options:
+      - id: a
+        text: "A user to a password."
+        explanation: "Not correct. Not an authorization object."
+      - id: b
+        text: "Resources or scopes to the policies that must pass."
+        explanation: "Correct. Without a permission, a policy has no effect."
+      - id: c
+        text: "A realm to a client."
+        explanation: "Not correct. Not a permission."
+      - id: d
+        text: "A token to a session."
+        explanation: "Not correct. Not a permission."
+    correct_option: b
+    explanation: "Correct. Without a permission, a policy has no effect."
+
+  - id: ats090-100-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a negative policy"
+    source_readings:
+      - sections/section-100/module-01/course-02-policies-and-permissions.md
+    prompt: "A role policy for `finance` has the logic NEGATIVE. Who passes it?"
+    options:
+      - id: a
+        text: "Users with the role finance."
+        explanation: "Not correct. That is POSITIVE logic."
+      - id: b
+        text: "Users without the role finance."
+        explanation: "Correct. NEGATIVE inverts the result."
+      - id: c
+        text: "Nobody."
+        explanation: "Not correct. It passes users without the role."
+      - id: d
+        text: "Everybody."
+        explanation: "Not correct. It does not pass users with the role."
+    correct_option: b
+    explanation: "Correct. NEGATIVE inverts the result."
+
+  - id: ats090-100-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the grant for a decision"
+    source_readings:
+      - sections/section-100/module-01/course-03-requesting-and-evaluating-permissions.md
+    prompt: "Which grant type asks Keycloak for a permission decision?"
+    options:
+      - id: a
+        text: "`password`."
+        explanation: "Not correct. It signs a user in."
+      - id: b
+        text: "`urn:ietf:params:oauth:grant-type:uma-ticket`."
+        explanation: "Correct. The client sends it with the audience and permission."
+      - id: c
+        text: "`client_credentials`."
+        explanation: "Not correct. It signs a client in."
+      - id: d
+        text: "`refresh_token`."
+        explanation: "Not correct. It renews a token."
+    correct_option: b
+    explanation: "Correct. The client sends it with the audience and permission."
+
+  - id: ats090-100-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the decision response mode"
+    source_readings:
+      - sections/section-100/module-01/course-03-requesting-and-evaluating-permissions.md
+    prompt: "With `response_mode=decision`, what does Keycloak return for an allowed request?"
+    options:
+      - id: a
+        text: "A token containing the permissions."
+        explanation: "Not correct. That is the default response mode."
+      - id: b
+        text: "A JSON answer with `result` true, HTTP 200."
+        explanation: "Correct. Denied requests return HTTP 403."
+      - id: c
+        text: "A redirect to the login page."
+        explanation: "Not correct. No redirect happens."
+      - id: d
+        text: "An empty response with HTTP 204."
+        explanation: "Not correct. Not the documented result."
+    correct_option: b
+    explanation: "Correct. Denied requests return HTTP 403."
+
+  - id: ats090-100-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a missing permission"
+    source_readings:
+      - sections/section-100/module-01/course-03-requesting-and-evaluating-permissions.md
+    prompt: "A scope exists, but no permission covers it. In ENFORCING mode, what happens on a request for it?"
+    options:
+      - id: a
+        text: "It is allowed."
+        explanation: "Not correct. That is DISABLED or PERMISSIVE behaviour."
+      - id: b
+        text: "It is denied."
+        explanation: "Correct. No permission means nothing grants it."
+      - id: c
+        text: "Keycloak creates a permission."
+        explanation: "Not correct. Nothing is created automatically."
+      - id: d
+        text: "The token is revoked."
+        explanation: "Not correct. Not related."
+    correct_option: b
+    explanation: "Correct. No permission means nothing grants it."
+
+  - id: ats090-100-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain the decision strategy"
+    source_readings:
+      - sections/section-100/module-01/course-04-decision-strategies-and-enforcement.md
+    prompt: "A permission has two policies and the decision strategy UNANIMOUS. When is it granted?"
+    options:
+      - id: a
+        text: "When at least one policy passes."
+        explanation: "Not correct. That is AFFIRMATIVE."
+      - id: b
+        text: "When all policies pass."
+        explanation: "Correct. UNANIMOUS needs every policy."
+      - id: c
+        text: "When most policies pass."
+        explanation: "Not correct. That is CONSENSUS."
+      - id: d
+        text: "Never."
+        explanation: "Not correct. It can be granted."
+    correct_option: b
+    explanation: "Correct. UNANIMOUS needs every policy."
+
+  - id: ats090-100-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Pick the enforcement mode"
+    source_readings:
+      - sections/section-100/module-01/course-04-decision-strategies-and-enforcement.md
+    prompt: "Which enforcement mode denies requests that no permission covers?"
+    options:
+      - id: a
+        text: "DISABLED."
+        explanation: "Not correct. It allows everything."
+      - id: b
+        text: "PERMISSIVE."
+        explanation: "Not correct. It allows requests with no matching permission."
+      - id: c
+        text: "ENFORCING."
+        explanation: "Correct. Requests without a covering permission are denied."
+      - id: d
+        text: "OPEN."
+        explanation: "Not correct. Not a mode."
+    correct_option: c
+    explanation: "Correct. Requests without a covering permission are denied."

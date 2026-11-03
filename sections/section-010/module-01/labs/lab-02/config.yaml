@@ -1,0 +1,60 @@
+# Trim A Browser Client To The One Flow It Uses
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-090-lab-010-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "deploy-keycloak"
+      description: "Deploys Keycloak 26.8.1, the tester pod and the lab's workloads, and waits until the administrator can sign in"
+      type: "file"
+      source: "bootstrap/01-deploy-keycloak.sh"
+    - name: "ats-090-lab-010-02-setup"
+      description: "Creates the realm inventory with inventory-web allowing every flow and carrying every role of the user"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-keycloak"
+      description: "Waits until kcadm.sh can sign in before the reference solution runs"
+      type: "file"
+      source: "testing/wait-for-keycloak.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-flows"
+      description: "Confirms inventory-web is public and only the standard flow is on"
+      type: "file"
+      source: "validation/validate-flows.sh"
+    - name: "validate-password-grant-refused"
+      description: "Confirms the password grant is refused for inventory-web"
+      type: "file"
+      source: "validation/validate-password-grant-refused.sh"
+    - name: "validate-implicit-refused"
+      description: "Confirms Keycloak refuses response_type=token for inventory-web"
+      type: "file"
+      source: "validation/validate-implicit-refused.sh"
+    - name: "validate-code-flow-works"
+      description: "Confirms the authorization code flow still shows the login page"
+      type: "file"
+      source: "validation/validate-code-flow-works.sh"
+    - name: "validate-full-scope-off"
+      description: "Confirms the full scope is not allowed"
+      type: "file"
+      source: "validation/validate-full-scope-off.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/keycloak/keycloak:26.8.1

@@ -13,10 +13,11 @@ This section comes first because every later topic depends on it. A browser sign
 - What a valid redirect URI is, why Keycloak compares it exactly, and why a wildcard is dangerous.
 - The front channel and the back channel of a browser sign-in.
 - What web origins and Cross-Origin Resource Sharing (CORS) protect, and what the `+` value means.
+- Which flows a client can switch on, why the implicit flow and direct access grants stay off for a browser client, and what Full scope allowed does to a token.
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
+The section has one module. It has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
 
 ### 1. Configure Clients For Applications And Services
 
@@ -25,7 +26,8 @@ The playground holds the namespace `clients-demo` with Keycloak, the realm `inve
 1. Public Clients, Confidential Clients And Client Authentication
 2. Valid Redirect URIs And The Front Channel
 3. Web Origins And CORS, followed by the lab **Lock Down The Redirect URIs And Web Origins Of A Browser Client**
-4. Summary
+4. Client Settings And Capabilities, followed by the lab **Trim A Browser Client To The One Flow It Uses**
+5. Summary
 
 ## Section capstone: Secure The Clients Of A Realm
 
