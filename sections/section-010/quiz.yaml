@@ -1,0 +1,245 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-010
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Clients, Redirect URIs And Web Origins"
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell public and confidential clients apart"
+    source_readings:
+      - sections/section-010/module-01/course-01-public-and-confidential-clients.md
+    prompt: "What decides whether an OAuth 2.0 client is public or confidential?"
+    options:
+      - id: a
+        text: "Whether the client can keep a credential secret."
+        explanation: "Correct. A browser or laptop application cannot hide a secret, so it is public. A server can, so it is confidential."
+      - id: b
+        text: "Whether the client uses the authorization code flow."
+        explanation: "Not correct. Both client types can use the authorization code flow."
+      - id: c
+        text: "Whether the realm has more than one client."
+        explanation: "Not correct. The number of clients in a realm does not set the type of one client."
+      - id: d
+        text: "Whether the client has a valid redirect URI."
+        explanation: "Not correct. Public and confidential clients both use redirect URIs."
+    correct_option: a
+    explanation: "Correct. A browser or laptop application cannot hide a secret, so it is public. A server can, so it is confidential."
+
+  - id: ats090-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the Client authentication switch"
+    source_readings:
+      - sections/section-010/module-01/course-01-public-and-confidential-clients.md
+    prompt: "In the Admin Console, a client has **Client authentication** switched on. What does that mean?"
+    options:
+      - id: a
+        text: "It is a public client, with `publicClient` set to `true`."
+        explanation: "Not correct. The switch has the opposite meaning of the `publicClient` field."
+      - id: b
+        text: "Users must sign in with a second factor."
+        explanation: "Not correct. The switch is about the client, not about the user."
+      - id: c
+        text: "It is a confidential client, with `publicClient` set to `false`."
+        explanation: "Correct. Client authentication on means the client must authenticate at the token endpoint."
+      - id: d
+        text: "Keycloak requires PKCE for every request."
+        explanation: "Not correct. PKCE is a separate client attribute."
+    correct_option: c
+    explanation: "Correct. Client authentication on means the client must authenticate at the token endpoint."
+
+  - id: ats090-010-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what a failed client authentication returns"
+    source_readings:
+      - sections/section-010/module-01/course-01-public-and-confidential-clients.md
+    prompt: "A confidential client sends a client credentials request to the token endpoint with a wrong client secret. What does Keycloak answer?"
+    options:
+      - id: a
+        text: "Status `404`, because the user does not exist."
+        explanation: "Not correct. A client credentials request has no user."
+      - id: b
+        text: "Status `401`, because the client failed to authenticate."
+        explanation: "Correct. Keycloak checks the client before anything else."
+      - id: c
+        text: "Status `200` with a token that has no claims."
+        explanation: "Not correct. Keycloak does not issue a token to a client that failed to authenticate."
+      - id: d
+        text: "Status `400`, because the redirect URI is invalid."
+        explanation: "Not correct. A client credentials request has no redirect URI."
+    correct_option: b
+    explanation: "Correct. Keycloak checks the client before anything else."
+
+  - id: ats090-010-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know which grants need a confidential client"
+    source_readings:
+      - sections/section-010/module-01/course-01-public-and-confidential-clients.md
+    prompt: "Which request can only a confidential client send successfully?"
+    options:
+      - id: a
+        text: "The authorization code flow with PKCE."
+        explanation: "Not correct. A public client uses this flow."
+      - id: b
+        text: "The authorization request to the `/auth` endpoint."
+        explanation: "Not correct. Both client types send it."
+      - id: c
+        text: "A sign-in in the user's browser."
+        explanation: "Not correct. A single page application is a public client and signs users in."
+      - id: d
+        text: "The client credentials grant, which gets a token for the client's service account."
+        explanation: "Correct. A public client cannot prove who it is, so Keycloak refuses this grant."
+    correct_option: d
+    explanation: "Correct. A public client cannot prove who it is, so Keycloak refuses this grant."
+
+  - id: ats090-010-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe the front channel"
+    source_readings:
+      - sections/section-010/module-01/course-02-redirect-uris.md
+    prompt: "Which message travels in the front channel of the authorization code flow?"
+    options:
+      - id: a
+        text: "The request that exchanges the code for tokens."
+        explanation: "Not correct. That request goes directly from the application to Keycloak, in the back channel."
+      - id: b
+        text: "The redirect that carries the authorization code to the `redirect_uri`."
+        explanation: "Correct. The browser follows this redirect, so the code passes through the browser."
+      - id: c
+        text: "The token response with the access token."
+        explanation: "Not correct. Keycloak sends tokens in the back channel."
+      - id: d
+        text: "The client credentials request of a service."
+        explanation: "Not correct. It is a direct request with no browser."
+    correct_option: b
+    explanation: "Correct. The browser follows this redirect, so the code passes through the browser."
+
+  - id: ats090-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict Keycloak's answer to an unknown redirect URI"
+    source_readings:
+      - sections/section-010/module-01/course-02-redirect-uris.md
+    prompt: "The client lists only `http://localhost:5173/callback`. A request arrives with `redirect_uri=http://attacker.example/callback`. What does Keycloak do?"
+    options:
+      - id: a
+        text: "It answers with status `400` and an error page, and shows no login form."
+        explanation: "Correct. Keycloak refuses before the user types anything."
+      - id: b
+        text: "It shows the login form and redirects to the attacker after sign-in."
+        explanation: "Not correct. Keycloak checks the address before it shows the login form."
+      - id: c
+        text: "It redirects to `http://localhost:5173/callback` instead."
+        explanation: "Not correct. Keycloak does not replace the address."
+      - id: d
+        text: "It shows the login form but leaves the code out of the redirect."
+        explanation: "Not correct. The request is refused at the start."
+    correct_option: a
+    explanation: "Correct. Keycloak refuses before the user types anything."
+
+  - id: ats090-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the risk of a wildcard redirect URI"
+    source_readings:
+      - sections/section-010/module-01/course-02-redirect-uris.md
+    prompt: "Why is a valid redirect URI of `*` dangerous?"
+    options:
+      - id: a
+        text: "The browser stops following redirects."
+        explanation: "Not correct. The browser follows any redirect."
+      - id: b
+        text: "Keycloak turns the client into a confidential client."
+        explanation: "Not correct. The wildcard does not change the client type."
+      - id: c
+        text: "Keycloak stops issuing tokens to the client."
+        explanation: "Not correct. Tokens are issued as usual."
+      - id: d
+        text: "Keycloak sends the authorization code to any address a request names, including an attacker's site."
+        explanation: "Correct. The wildcard removes the only check on where the code goes."
+    correct_option: d
+    explanation: "Correct. The wildcard removes the only check on where the code goes."
+
+  - id: ats090-010-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a wildcard at the end of a redirect URI"
+    source_readings:
+      - sections/section-010/module-01/course-02-redirect-uris.md
+    prompt: "A client has the valid redirect URI `http://localhost:5173/*`. Which addresses does it match?"
+    options:
+      - id: a
+        text: "Only `http://localhost:5173/callback`."
+        explanation: "Not correct. That is what an entry without a wildcard would match."
+      - id: b
+        text: "Every port on `localhost`."
+        explanation: "Not correct. The port is before the wildcard, so it must match."
+      - id: c
+        text: "Every path on `http://localhost:5173`."
+        explanation: "Correct. The `*` matches anything after the point where it stands."
+      - id: d
+        text: "Every address on every website."
+        explanation: "Not correct. Only the entry `*` alone matches that."
+    correct_option: c
+    explanation: "Correct. The `*` matches anything after the point where it stands."
+
+  - id: ats090-010-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the web origins value +"
+    source_readings:
+      - sections/section-010/module-01/course-03-web-origins-and-cors.md
+    prompt: "What does the web origins value `+` mean?"
+    options:
+      - id: a
+        text: "The origins of the client's valid redirect URIs may read the responses."
+        explanation: "Correct. You list the exact redirect URIs once and the origins follow."
+      - id: b
+        text: "No website may read the responses."
+        explanation: "Not correct. An empty list means that."
+      - id: c
+        text: "Every website may read the responses."
+        explanation: "Not correct. The value `*` means that."
+      - id: d
+        text: "Only Keycloak's own origin may read the responses."
+        explanation: "Not correct. `+` is about the client's redirect URIs."
+    correct_option: a
+    explanation: "Correct. You list the exact redirect URIs once and the origins follow."
+
+  - id: ats090-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what CORS protects"
+    source_readings:
+      - sections/section-010/module-01/course-03-web-origins-and-cors.md
+    prompt: "A request from the origin `http://attacker.example` posts a valid code to the token endpoint of a client that allows only `http://localhost:5173`. Sent with `curl`, what does the response show?"
+    options:
+      - id: a
+        text: "Status `401`, because the origin is not allowed."
+        explanation: "Not correct. Keycloak does not refuse the request because of its origin."
+      - id: b
+        text: "Status `200` with tokens, but no `Access-Control-Allow-Origin` header."
+        explanation: "Correct. `curl` ignores CORS. A browser would hide the answer from the script."
+      - id: c
+        text: "Status `403`, because the origin is not in the web origins."
+        explanation: "Not correct. Web origins only decide the CORS header."
+      - id: d
+        text: "Status `200` with `Access-Control-Allow-Origin: *`."
+        explanation: "Not correct. Keycloak leaves the header out for an origin that is not allowed."
+    correct_option: b
+    explanation: "Correct. `curl` ignores CORS. A browser would hide the answer from the script."

@@ -1,0 +1,245 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-020
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "The Authorization Code Flow With PKCE"
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Place each request in the front or back channel"
+    source_readings:
+      - sections/section-020/module-01/course-01-the-authorization-code-flow.md
+    prompt: "Which request of the authorization code flow goes directly from the application to Keycloak, without the browser?"
+    options:
+      - id: a
+        text: "The authorization request to `/auth`."
+        explanation: "Not correct. The browser sends it."
+      - id: b
+        text: "The post of the login form."
+        explanation: "Not correct. The user's browser posts the form."
+      - id: c
+        text: "The token request that exchanges the code for tokens."
+        explanation: "Correct. It is the back channel request."
+      - id: d
+        text: "The redirect that carries the code."
+        explanation: "Not correct. It passes through the browser."
+    correct_option: c
+    explanation: "Correct. It is the back channel request."
+
+  - id: ats090-020-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know that a code works once"
+    source_readings:
+      - sections/section-020/module-01/course-01-the-authorization-code-flow.md
+    prompt: "An application sends the same authorization code to the token endpoint a second time. What does Keycloak answer?"
+    options:
+      - id: a
+        text: "An `invalid_grant` error, because a code works once."
+        explanation: "Correct. A code is also short-lived, about a minute by default."
+      - id: b
+        text: "The same tokens as the first time."
+        explanation: "Not correct. Keycloak does not accept a used code."
+      - id: c
+        text: "A new refresh token only."
+        explanation: "Not correct. Keycloak issues no tokens for a used code."
+      - id: d
+        text: "An error about the client secret."
+        explanation: "Not correct. A public client sends no secret."
+    correct_option: a
+    explanation: "Correct. A code is also short-lived, about a minute by default."
+
+  - id: ats090-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the redirect URI rule for the code exchange"
+    source_readings:
+      - sections/section-020/module-01/course-01-the-authorization-code-flow.md
+    prompt: "Which `redirect_uri` must the token request send?"
+    options:
+      - id: a
+        text: "Any valid redirect URI of the client."
+        explanation: "Not correct. A different value makes Keycloak refuse the exchange."
+      - id: b
+        text: "No `redirect_uri`, because the code already identifies the flow."
+        explanation: "Not correct. The parameter is required in the exchange."
+      - id: c
+        text: "The address of Keycloak's token endpoint."
+        explanation: "Not correct. The parameter holds the application's callback address."
+      - id: d
+        text: "The same value the authorization request used."
+        explanation: "Correct. Keycloak checks that the code is used by the flow that asked for it."
+    correct_option: d
+    explanation: "Correct. Keycloak checks that the code is used by the flow that asked for it."
+
+  - id: ats090-020-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe what PKCE sends in the authorization request"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "With PKCE, what does the application send in the authorization request?"
+    options:
+      - id: a
+        text: "The code verifier itself, with the method `S256`."
+        explanation: "Not correct. The verifier travels only in the token request."
+      - id: b
+        text: "The code challenge, a hash of the code verifier, and the `code_challenge_method`."
+        explanation: "Correct. The verifier itself stays in the application until the token request."
+      - id: c
+        text: "The client secret, as a hash."
+        explanation: "Not correct. A public client has no client secret."
+      - id: d
+        text: "The `nonce`, in place of the challenge."
+        explanation: "Not correct. The nonce is a different value with a different job."
+    correct_option: b
+    explanation: "Correct. The verifier itself stays in the application until the token request."
+
+  - id: ats090-020-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict an exchange without the verifier"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "An attacker steals a code that was issued with a PKCE challenge and sends it to the token endpoint without a code verifier. What happens?"
+    options:
+      - id: a
+        text: "Keycloak answers `invalid_grant`, because the PKCE verification fails."
+        explanation: "Correct. Without the verifier, the code is worthless."
+      - id: b
+        text: "Keycloak issues tokens, because a public client has no secret to check."
+        explanation: "Not correct. Keycloak checks the verifier against the stored challenge."
+      - id: c
+        text: "Keycloak asks for the user's password."
+        explanation: "Not correct. The token endpoint does not ask for a password in this flow."
+      - id: d
+        text: "Keycloak issues only an access token."
+        explanation: "Not correct. Keycloak issues no token at all."
+    correct_option: a
+    explanation: "Correct. Without the verifier, the code is worthless."
+
+  - id: ats090-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare the PKCE methods"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "Why should a client use the method `S256` and not `plain`?"
+    options:
+      - id: a
+        text: "The method `plain` is not defined in RFC 7636."
+        explanation: "Not correct. The RFC defines both methods."
+      - id: b
+        text: "The method `S256` encrypts the authorization code."
+        explanation: "Not correct. `S256` hashes the verifier. It does not encrypt the code."
+      - id: c
+        text: "With `plain`, the challenge is the verifier, so anyone who reads the authorization request reads the verifier."
+        explanation: "Correct. `S256` sends a hash that cannot be turned back into the verifier."
+      - id: d
+        text: "The method `S256` lets the application use a code more than once."
+        explanation: "Not correct. A code works once with either method."
+    correct_option: c
+    explanation: "Correct. `S256` sends a hash that cannot be turned back into the verifier."
+
+  - id: ats090-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make Keycloak require PKCE"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "A client has the attribute `pkce.code.challenge.method` set to `S256`. What does Keycloak do with an authorization request that has no code challenge?"
+    options:
+      - id: a
+        text: "It shows the login page and skips PKCE for this request."
+        explanation: "Not correct. The attribute makes PKCE required."
+      - id: b
+        text: "It redirects back with `error=invalid_request` and shows no login page."
+        explanation: "Correct. Only requests with `S256` are accepted."
+      - id: c
+        text: "It treats the client as confidential."
+        explanation: "Not correct. The attribute does not change the client type."
+      - id: d
+        text: "It accepts the request if the client sends `plain`."
+        explanation: "Not correct. With the attribute set to `S256`, only `S256` is accepted."
+    correct_option: b
+    explanation: "Correct. Only requests with `S256` are accepted."
+
+  - id: ats090-020-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compute the S256 challenge"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "How does an application build the `S256` code challenge?"
+    options:
+      - id: a
+        text: "It encodes the verifier as standard Base64 with `=` padding."
+        explanation: "Not correct. It does not hash the verifier and it uses the wrong encoding."
+      - id: b
+        text: "It hashes the client secret with SHA-256."
+        explanation: "Not correct. The challenge comes from the verifier, and a public client has no secret."
+      - id: c
+        text: "It hashes the `state` value with MD5."
+        explanation: "Not correct. The challenge is not related to `state` and uses SHA-256."
+      - id: d
+        text: "It hashes the verifier with SHA-256 and encodes the hash as Base64URL without `=` padding."
+        explanation: "Correct. Standard Base64 or padding makes Keycloak's comparison fail."
+    correct_option: d
+    explanation: "Correct. Standard Base64 or padding makes Keycloak's comparison fail."
+
+  - id: ats090-020-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what the state value is for"
+    source_readings:
+      - sections/section-020/module-01/course-03-state-nonce-and-the-id-token.md
+    prompt: "What does the application check with the `state` value?"
+    options:
+      - id: a
+        text: "That the `state` claim of the ID token equals the value it sent."
+        explanation: "Not correct. The ID token carries the `nonce`, not the `state`."
+      - id: b
+        text: "That the `state` in the redirect equals the value it sent in the authorization request."
+        explanation: "Correct. The check shows the redirect answers a sign-in the application started."
+      - id: c
+        text: "That the `state` is the hash of the code verifier."
+        explanation: "Not correct. The two values are not related."
+      - id: d
+        text: "That the `state` is the same for every user."
+        explanation: "Not correct. A fixed value protects nothing."
+    correct_option: b
+    explanation: "Correct. The check shows the redirect answers a sign-in the application started."
+
+  - id: ats090-020-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what the nonce is for"
+    source_readings:
+      - sections/section-020/module-01/course-03-state-nonce-and-the-id-token.md
+    prompt: "Where does the `nonce` come back, and what does it protect against?"
+    options:
+      - id: a
+        text: "In the `nonce` claim of the ID token. It protects against a replayed ID token."
+        explanation: "Correct. A token from another sign-in carries another nonce."
+      - id: b
+        text: "In the redirect to the callback. It protects against a replayed code."
+        explanation: "Not correct. Keycloak returns `state` in the redirect, not the nonce."
+      - id: c
+        text: "In the `typ` claim of the access token. It protects against a stolen refresh token."
+        explanation: "Not correct. The `typ` claim says the token type."
+      - id: d
+        text: "In the `Origin` header of the token request. It protects against a wrong CORS setting."
+        explanation: "Not correct. The nonce has nothing to do with CORS."
+    correct_option: a
+    explanation: "Correct. A token from another sign-in carries another nonce."

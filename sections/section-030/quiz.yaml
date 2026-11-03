@@ -1,0 +1,245 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats090-030
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "Validating Access Tokens In An API"
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+  - id: ats090-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Predict the status of an audience failure"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-an-api-checks.md
+    prompt: "A token has a valid signature, the right issuer and is not expired, but its `aud` does not include the API. What does the API answer?"
+    options:
+      - id: a
+        text: "Status `403`, because the user lacks a role."
+        explanation: "Not correct. `403` is for a missing role, which is checked after the token is accepted."
+      - id: b
+        text: "Status `200`, because the signature is valid."
+        explanation: "Not correct. A valid signature is only the first check."
+      - id: c
+        text: "Status `404`, because the API cannot find the token."
+        explanation: "Not correct. `404` means a missing resource."
+      - id: d
+        text: "Status `401`, because the token is not acceptable for this API."
+        explanation: "Correct. A failed audience check is a `401`."
+    correct_option: d
+    explanation: "Correct. A failed audience check is a `401`."
+
+  - id: ats090-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Predict the status of a missing role"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-an-api-checks.md
+    prompt: "The token passes every check, but the user lacks the realm role the API needs. What does the API answer?"
+    options:
+      - id: a
+        text: "Status `401`, because the token is not valid."
+        explanation: "Not correct. The token is valid."
+      - id: b
+        text: "Status `403`, because the token is valid but the user is not allowed."
+        explanation: "Correct. The role check is the last check."
+      - id: c
+        text: "Status `200`, with an empty list."
+        explanation: "Not correct. The API refuses the request."
+      - id: d
+        text: "Status `401`, because the audience is missing."
+        explanation: "Not correct. The audience check passed in this case."
+    correct_option: b
+    explanation: "Correct. The role check is the last check."
+
+  - id: ats090-030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell azp and aud apart"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-an-api-checks.md
+    prompt: "What is the difference between the claims `azp` and `aud` of an access token?"
+    options:
+      - id: a
+        text: "`azp` is the client that asked for the token, and `aud` lists who the token is for."
+        explanation: "Correct. An API checks `aud`."
+      - id: b
+        text: "`azp` lists who the token is for, and `aud` is the client that asked for it."
+        explanation: "Not correct. The two meanings are the other way round."
+      - id: c
+        text: "`azp` is the user, and `aud` is the realm."
+        explanation: "Not correct. The user is in `sub`, and the realm is in `iss`."
+      - id: d
+        text: "They are two names for the same value."
+        explanation: "Not correct. They hold different values, as the `inventory-cli` token shows."
+    correct_option: a
+    explanation: "Correct. An API checks `aud`."
+
+  - id: ats090-030-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Connect a token to its signing key"
+    source_readings:
+      - sections/section-030/module-01/course-02-signatures-and-jwks.md
+    prompt: "How does an API find the key that signed a token?"
+    options:
+      - id: a
+        text: "It reads the public key from the token payload."
+        explanation: "Not correct. A key inside the token would prove nothing."
+      - id: b
+        text: "It asks Keycloak to sign the token again on every request."
+        explanation: "Not correct. The API checks locally with the public key."
+      - id: c
+        text: "It reads the `kid` in the token header and takes the key with that `kid` from the JWKS."
+        explanation: "Correct. The realm publishes the JWKS at its `certs` endpoint."
+      - id: d
+        text: "It uses the `azp` claim as the key name."
+        explanation: "Not correct. `azp` names the client. The key name is `kid`."
+    correct_option: c
+    explanation: "Correct. The realm publishes the JWKS at its `certs` endpoint."
+
+  - id: ats090-030-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict the effect of a changed payload"
+    source_readings:
+      - sections/section-030/module-01/course-02-signatures-and-jwks.md
+    prompt: "Someone changes `preferred_username` in a token's payload and keeps the original signature. What does the API do?"
+    options:
+      - id: a
+        text: "It accepts the token, because it only decodes the claims."
+        explanation: "Not correct. A decoded token is not a validated token."
+      - id: b
+        text: "It passes the signature check and fails on the audience."
+        explanation: "Not correct. That happens to the original token, not to the changed one."
+      - id: c
+        text: "It answers `401`, because the signature does not verify."
+        explanation: "Correct. The signature covers the header and the payload."
+      - id: d
+        text: "It answers `403`, because the user changed."
+        explanation: "Not correct. The token fails before any role check."
+    correct_option: c
+    explanation: "Correct. The signature covers the header and the payload."
+
+  - id: ats090-030-q06
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain how an API survives key rotation"
+    source_readings:
+      - sections/section-030/module-01/course-02-signatures-and-jwks.md
+    prompt: "A token names a `kid` that the API has not seen. What does a well-built API do?"
+    options:
+      - id: a
+        text: "It loads the JWKS again and looks for the key."
+        explanation: "Correct. This is how rotation works without breaking the API."
+      - id: b
+        text: "It refuses all tokens until it restarts."
+        explanation: "Not correct. That would break the API at every rotation."
+      - id: c
+        text: "It accepts the token without a signature check."
+        explanation: "Not correct. An unknown key is a reason to look again, not to skip the check."
+      - id: d
+        text: "It takes the key from the token header."
+        explanation: "Not correct. The header only names the key."
+    correct_option: a
+    explanation: "Correct. This is how rotation works without breaking the API."
+
+  - id: ats090-030-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Share an audience with a client scope"
+    source_readings:
+      - sections/section-030/module-01/course-03-audience-and-client-scopes.md
+    prompt: "Three clients call the same API. What is the way to give their tokens the API's audience and no other client's?"
+    options:
+      - id: a
+        text: "Put the audience mapper in a realm default scope."
+        explanation: "Not correct. Every client's tokens would then carry the audience."
+      - id: b
+        text: "Turn off the audience check in the API."
+        explanation: "Not correct. Every token of the realm would then work on the API."
+      - id: c
+        text: "Add the audience only to the ID token."
+        explanation: "Not correct. The API reads the access token."
+      - id: d
+        text: "Put an audience mapper in a client scope and add the scope as a default scope to those three clients."
+        explanation: "Correct. A client scope is a reusable set of mappers."
+    correct_option: d
+    explanation: "Correct. A client scope is a reusable set of mappers."
+
+  - id: ats090-030-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Limit an audience mapper to one client"
+    source_readings:
+      - sections/section-030/module-01/course-03-audience-and-client-scopes.md
+    prompt: "An audience mapper for `inventory-api` sits in the dedicated scope of `inventory-cli`. What is in the `aud` of a token for `inventory-reporter`?"
+    options:
+      - id: a
+        text: "It includes `inventory-api`, because the mapper is in the realm."
+        explanation: "Not correct. A dedicated scope applies to one client."
+      - id: b
+        text: "It does not include `inventory-api`."
+        explanation: "Correct. The mapper applies only to tokens of `inventory-cli`."
+      - id: c
+        text: "It includes `inventory-api`, after the client signs in again."
+        explanation: "Not correct. Signing in again does not move the mapper."
+      - id: d
+        text: "It is empty."
+        explanation: "Not correct. The token keeps the audiences its own client scopes add."
+    correct_option: b
+    explanation: "Correct. The mapper applies only to tokens of `inventory-cli`."
+
+  - id: ats090-030-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know that a token is a snapshot"
+    source_readings:
+      - sections/section-030/module-01/course-04-roles-and-introspection.md
+    prompt: "An administrator removes a realm role from a user. The user's access token was issued before the change. What does that token show?"
+    options:
+      - id: a
+        text: "The role stays in the token until it expires. A new token has no role."
+        explanation: "Correct. Role changes reach the API with the next token."
+      - id: b
+        text: "The role disappears from the token at once."
+        explanation: "Not correct. A signed token does not change after issue."
+      - id: c
+        text: "The token becomes invalid at once."
+        explanation: "Not correct. The signature and expiry are still valid."
+      - id: d
+        text: "The token keeps the role forever."
+        explanation: "Not correct. It expires, by default after five minutes."
+    correct_option: a
+    explanation: "Correct. Role changes reach the API with the next token."
+
+  - id: ats090-030-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Choose introspection for a revoked session"
+    source_readings:
+      - sections/section-030/module-01/course-04-roles-and-introspection.md
+    prompt: "A user's sessions are ended. The API validates tokens locally. What does the API do with the user's existing access token?"
+    options:
+      - id: a
+        text: "It refuses the token at once, because the session ended."
+        explanation: "Not correct. The API cannot know about the session without asking Keycloak."
+      - id: b
+        text: "It refuses the token on the next key rotation."
+        explanation: "Not correct. Rotation does not depend on sessions."
+      - id: c
+        text: "It accepts the token only if the client is public."
+        explanation: "Not correct. Accepting the token does not depend on the client type."
+      - id: d
+        text: "It still accepts the token until `exp`. Introspection would show `active: false` at once."
+        explanation: "Correct. Local validation never asks Keycloak. Only a confidential client can introspect."
+    correct_option: d
+    explanation: "Correct. Local validation never asks Keycloak. Only a confidential client can introspect."

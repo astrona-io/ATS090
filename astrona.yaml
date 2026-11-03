@@ -126,6 +126,11 @@ modules:
           - name: "RFC 6749 section 2.1: client types"
             url: https://datatracker.ietf.org/doc/html/rfc6749#section-2.1
 
+      - type: quiz
+        title: "Knowledge Check: Clients, Redirect URIs And Web Origins"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
+
   - id: module-020
     title: "The Authorization Code Flow With PKCE"
     description: >
@@ -196,6 +201,11 @@ modules:
             url: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
           - name: "RFC 7636: Proof Key for Code Exchange"
             url: https://datatracker.ietf.org/doc/html/rfc7636
+
+      - type: quiz
+        title: "Knowledge Check: The Authorization Code Flow With PKCE"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
     title: "Validating Access Tokens In An API"
@@ -274,6 +284,11 @@ modules:
           - name: "Securing applications: OpenID Connect"
             url: https://www.keycloak.org/securing-apps/oidc-layers
 
+      - type: quiz
+        title: "Knowledge Check: Validating Access Tokens In An API"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
+
   - id: module-040
     title: "Token Propagation Through An API Gateway"
     description: >
@@ -345,3 +360,11 @@ modules:
             url: https://datatracker.ietf.org/doc/html/rfc8693
           - name: "Server Administration Guide: audience support"
             url: https://www.keycloak.org/docs/latest/server_admin/index.html#audience-support
+      - type: quiz
+        title: "Knowledge Check: Token Propagation Through An API Gateway"
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Domain Quiz"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

@@ -1,0 +1,288 @@
+# Final domain quiz. Listed in astrona.yaml as the last `type: quiz` entry. Three questions from each section.
+schema_version: 1
+kind: question_bank
+id: ats090-final
+course_id: ATS090
+exam_code: KEYCLOAK
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: ats090
+  title: "Keycloak: Securing Applications & Services"
+questions:
+  - id: ats090-final-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell public and confidential clients apart"
+    source_readings:
+      - sections/section-010/module-01/course-01-public-and-confidential-clients.md
+    prompt: "What decides whether an OAuth 2.0 client is public or confidential?"
+    options:
+      - id: a
+        text: "Whether the client uses the authorization code flow."
+        explanation: "Not correct. Both client types can use the authorization code flow."
+      - id: b
+        text: "Whether the realm has more than one client."
+        explanation: "Not correct. The number of clients in a realm does not set the type of one client."
+      - id: c
+        text: "Whether the client can keep a credential secret."
+        explanation: "Correct. A browser or laptop application cannot hide a secret, so it is public. A server can, so it is confidential."
+      - id: d
+        text: "Whether the client has a valid redirect URI."
+        explanation: "Not correct. Public and confidential clients both use redirect URIs."
+    correct_option: c
+    explanation: "Correct. A browser or laptop application cannot hide a secret, so it is public. A server can, so it is confidential."
+
+  - id: ats090-final-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict Keycloak's answer to an unknown redirect URI"
+    source_readings:
+      - sections/section-010/module-01/course-02-redirect-uris.md
+    prompt: "The client lists only `http://localhost:5173/callback`. A request arrives with `redirect_uri=http://attacker.example/callback`. What does Keycloak do?"
+    options:
+      - id: a
+        text: "It answers with status `400` and an error page, and shows no login form."
+        explanation: "Correct. Keycloak refuses before the user types anything."
+      - id: b
+        text: "It shows the login form and redirects to the attacker after sign-in."
+        explanation: "Not correct. Keycloak checks the address before it shows the login form."
+      - id: c
+        text: "It redirects to `http://localhost:5173/callback` instead."
+        explanation: "Not correct. Keycloak does not replace the address."
+      - id: d
+        text: "It shows the login form but leaves the code out of the redirect."
+        explanation: "Not correct. The request is refused at the start."
+    correct_option: a
+    explanation: "Correct. Keycloak refuses before the user types anything."
+
+  - id: ats090-final-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what CORS protects"
+    source_readings:
+      - sections/section-010/module-01/course-03-web-origins-and-cors.md
+    prompt: "A request from the origin `http://attacker.example` posts a valid code to the token endpoint of a client that allows only `http://localhost:5173`. Sent with `curl`, what does the response show?"
+    options:
+      - id: a
+        text: "Status `401`, because the origin is not allowed."
+        explanation: "Not correct. Keycloak does not refuse the request because of its origin."
+      - id: b
+        text: "Status `403`, because the origin is not in the web origins."
+        explanation: "Not correct. Web origins only decide the CORS header."
+      - id: c
+        text: "Status `200` with `Access-Control-Allow-Origin: *`."
+        explanation: "Not correct. Keycloak leaves the header out for an origin that is not allowed."
+      - id: d
+        text: "Status `200` with tokens, but no `Access-Control-Allow-Origin` header."
+        explanation: "Correct. `curl` ignores CORS. A browser would hide the answer from the script."
+    correct_option: d
+    explanation: "Correct. `curl` ignores CORS. A browser would hide the answer from the script."
+
+  - id: ats090-final-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe what PKCE sends in the authorization request"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "With PKCE, what does the application send in the authorization request?"
+    options:
+      - id: a
+        text: "The code verifier itself, with the method `S256`."
+        explanation: "Not correct. The verifier travels only in the token request."
+      - id: b
+        text: "The code challenge, a hash of the code verifier, and the `code_challenge_method`."
+        explanation: "Correct. The verifier itself stays in the application until the token request."
+      - id: c
+        text: "The client secret, as a hash."
+        explanation: "Not correct. A public client has no client secret."
+      - id: d
+        text: "The `nonce`, in place of the challenge."
+        explanation: "Not correct. The nonce is a different value with a different job."
+    correct_option: b
+    explanation: "Correct. The verifier itself stays in the application until the token request."
+
+  - id: ats090-final-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict an exchange without the verifier"
+    source_readings:
+      - sections/section-020/module-01/course-02-pkce.md
+    prompt: "An attacker steals a code that was issued with a PKCE challenge and sends it to the token endpoint without a code verifier. What happens?"
+    options:
+      - id: a
+        text: "Keycloak issues tokens, because a public client has no secret to check."
+        explanation: "Not correct. Keycloak checks the verifier against the stored challenge."
+      - id: b
+        text: "Keycloak asks for the user's password."
+        explanation: "Not correct. The token endpoint does not ask for a password in this flow."
+      - id: c
+        text: "Keycloak issues only an access token."
+        explanation: "Not correct. Keycloak issues no token at all."
+      - id: d
+        text: "Keycloak answers `invalid_grant`, because the PKCE verification fails."
+        explanation: "Correct. Without the verifier, the code is worthless."
+    correct_option: d
+    explanation: "Correct. Without the verifier, the code is worthless."
+
+  - id: ats090-final-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what the state value is for"
+    source_readings:
+      - sections/section-020/module-01/course-03-state-nonce-and-the-id-token.md
+    prompt: "What does the application check with the `state` value?"
+    options:
+      - id: a
+        text: "That the `state` claim of the ID token equals the value it sent."
+        explanation: "Not correct. The ID token carries the `nonce`, not the `state`."
+      - id: b
+        text: "That the `state` is the hash of the code verifier."
+        explanation: "Not correct. The two values are not related."
+      - id: c
+        text: "That the `state` in the redirect equals the value it sent in the authorization request."
+        explanation: "Correct. The check shows the redirect answers a sign-in the application started."
+      - id: d
+        text: "That the `state` is the same for every user."
+        explanation: "Not correct. A fixed value protects nothing."
+    correct_option: c
+    explanation: "Correct. The check shows the redirect answers a sign-in the application started."
+
+  - id: ats090-final-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Predict the status of an audience failure"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-an-api-checks.md
+    prompt: "A token has a valid signature, the right issuer and is not expired, but its `aud` does not include the API. What does the API answer?"
+    options:
+      - id: a
+        text: "Status `401`, because the token is not acceptable for this API."
+        explanation: "Correct. A failed audience check is a `401`."
+      - id: b
+        text: "Status `403`, because the user lacks a role."
+        explanation: "Not correct. `403` is for a missing role, which is checked after the token is accepted."
+      - id: c
+        text: "Status `200`, because the signature is valid."
+        explanation: "Not correct. A valid signature is only the first check."
+      - id: d
+        text: "Status `404`, because the API cannot find the token."
+        explanation: "Not correct. `404` means a missing resource."
+    correct_option: a
+    explanation: "Correct. A failed audience check is a `401`."
+
+  - id: ats090-final-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Share an audience with a client scope"
+    source_readings:
+      - sections/section-030/module-01/course-03-audience-and-client-scopes.md
+    prompt: "Three clients call the same API. What is the way to give their tokens the API's audience and no other client's?"
+    options:
+      - id: a
+        text: "Put the audience mapper in a realm default scope."
+        explanation: "Not correct. Every client's tokens would then carry the audience."
+      - id: b
+        text: "Put an audience mapper in a client scope and add the scope as a default scope to those three clients."
+        explanation: "Correct. A client scope is a reusable set of mappers."
+      - id: c
+        text: "Turn off the audience check in the API."
+        explanation: "Not correct. Every token of the realm would then work on the API."
+      - id: d
+        text: "Add the audience only to the ID token."
+        explanation: "Not correct. The API reads the access token."
+    correct_option: b
+    explanation: "Correct. A client scope is a reusable set of mappers."
+
+  - id: ats090-final-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Choose introspection for a revoked session"
+    source_readings:
+      - sections/section-030/module-01/course-04-roles-and-introspection.md
+    prompt: "A user's sessions are ended. The API validates tokens locally. What does the API do with the user's existing access token?"
+    options:
+      - id: a
+        text: "It refuses the token at once, because the session ended."
+        explanation: "Not correct. The API cannot know about the session without asking Keycloak."
+      - id: b
+        text: "It still accepts the token until `exp`. Introspection would show `active: false` at once."
+        explanation: "Correct. Local validation never asks Keycloak. Only a confidential client can introspect."
+      - id: c
+        text: "It refuses the token on the next key rotation."
+        explanation: "Not correct. Rotation does not depend on sessions."
+      - id: d
+        text: "It accepts the token only if the client is public."
+        explanation: "Not correct. Accepting the token does not depend on the client type."
+    correct_option: b
+    explanation: "Correct. Local validation never asks Keycloak. Only a confidential client can introspect."
+
+  - id: ats090-final-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the risk of widening the audience"
+    source_readings:
+      - sections/section-040/module-01/course-01-forwarding-the-token.md
+    prompt: "Why is adding `inventory-api` to the audience of `inventory-cli`'s tokens a poor fix?"
+    options:
+      - id: a
+        text: "Keycloak does not allow more than one audience in a token."
+        explanation: "Not correct. A token can list several audiences."
+      - id: b
+        text: "It breaks the signature of the token."
+        explanation: "Not correct. Mappers run before Keycloak signs the token."
+      - id: c
+        text: "The API then answers `403` instead of `401`."
+        explanation: "Not correct. The API would accept the token."
+      - id: d
+        text: "The client could call the API without the gateway, and one token would work on every service."
+        explanation: "Correct. The gateway's checks, limits and logging can be bypassed."
+    correct_option: d
+    explanation: "Correct. The gateway's checks, limits and logging can be bypassed."
+
+  - id: ats090-final-q11
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "State the second audience rule"
+    source_readings:
+      - sections/section-040/module-01/course-02-standard-token-exchange.md
+    prompt: "The gateway asks for `audience=inventory-admin-api`, but nothing makes that audience available to the gateway. What does Keycloak answer?"
+    options:
+      - id: a
+        text: "An error that says the requested audience is not available."
+        explanation: "Correct. The `audience` parameter only filters what is already available."
+      - id: b
+        text: "A token that contains `inventory-admin-api`, because the gateway asked for it."
+        explanation: "Not correct. Keycloak never adds an audience because the request names it."
+      - id: c
+        text: "A token with an empty `aud`."
+        explanation: "Not correct. Keycloak answers with an error."
+      - id: d
+        text: "A token that the API refuses with `403`."
+        explanation: "Not correct. Keycloak does not issue the token."
+    correct_option: a
+    explanation: "Correct. The `audience` parameter only filters what is already available."
+
+  - id: ats090-final-q12
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Tell a missing audience from a missing role"
+    source_readings:
+      - sections/section-040/module-01/course-03-downscoping-and-a-second-api.md
+    prompt: "An exchanged token for `alice` reaches `reporting-api`, which requires the role `reporting-reader`. `alice` does not have it. What does the API answer?"
+    options:
+      - id: a
+        text: "`401`, because an exchanged token is never valid."
+        explanation: "Not correct. The exchanged token is valid and has the right audience."
+      - id: b
+        text: "`200`, because the gateway has the role."
+        explanation: "Not correct. The token carries the user's roles."
+      - id: c
+        text: "`403`, because the exchange keeps the user's roles and adds none."
+        explanation: "Correct. The audience check passes. The role check fails."
+      - id: d
+        text: "`200`, because the exchange adds the role."
+        explanation: "Not correct. An exchange adds no permissions."
+    correct_option: c
+    explanation: "Correct. The audience check passes. The role check fails."
