@@ -13,7 +13,7 @@
 training:
   id: ATS090
   title: "Keycloak: Securing Applications & Services"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Securing Applications & Services domain of
     the Keycloak training path: public and confidential clients, client
